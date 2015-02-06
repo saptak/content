@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2015-02-06T11:58:26-08:35</lastmod>
+    <lastmod>2015-02-06T13:03:40-08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/about/</loc>
+    <lastmod>2015-02-06T13:03:40-08:00</lastmod>
   </url>
   
   <url>
