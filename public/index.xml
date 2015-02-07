@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>saptak.github.io</title>
-    <link>http://localhost:1313/</link>
-    <description>Recent content on saptak.github.io</description>
+    <title>saptak</title>
+    <link>/</link>
+    <description>Recent content on saptak</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
     
     
     <lastBuildDate>Fri, 06 Feb 2015 13:03:40 PST</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>about</title>
-      <link>http://localhost:1313/about/</link>
+      <link>/about/</link>
       <pubDate>Fri, 06 Feb 2015 13:03:40 PST</pubDate>
       
-      <guid>http://localhost:1313/about/</guid>
+      <guid>/about/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Real time Data Ingestion in HBase &amp; Hive using Storm Bolt</title>
-      <link>http://localhost:1313/posts/Real%20time%20Data%20Ingestion%20in%20HBase%20-%20Hive%20using%20Storm%20Bolt/</link>
+      <link>/posts/Real%20time%20Data%20Ingestion%20in%20HBase%20-%20Hive%20using%20Storm%20Bolt/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 -0835</pubDate>
       
-      <guid>http://localhost:1313/posts/Real%20time%20Data%20Ingestion%20in%20HBase%20-%20Hive%20using%20Storm%20Bolt/</guid>
+      <guid>/posts/Real%20time%20Data%20Ingestion%20in%20HBase%20-%20Hive%20using%20Storm%20Bolt/</guid>
       <description>
 
 &lt;h2 id=&#34;overview:055c69fb56cd76d281fd68883ff1c99f&#34;&gt;Overview&lt;/h2&gt;
@@ -561,10 +561,10 @@ public void configureHBaseBolt(TopologyBuilder builder)
     
     <item>
       <title>Ingesting and processing Real-time events with Apache Storm</title>
-      <link>http://localhost:1313/posts/Ingesting%20and%20processing%20Real-time%20events%20with%20Apache%20Storm/</link>
+      <link>/posts/Ingesting%20and%20processing%20Real-time%20events%20with%20Apache%20Storm/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 -0825</pubDate>
       
-      <guid>http://localhost:1313/posts/Ingesting%20and%20processing%20Real-time%20events%20with%20Apache%20Storm/</guid>
+      <guid>/posts/Ingesting%20and%20processing%20Real-time%20events%20with%20Apache%20Storm/</guid>
       <description>
 
 &lt;p&gt;Trucking business is a high-risk business where truck drivers venture into remote areas, often despite harsh weather conditions and chaotic traffic on a daily basis. Using this solution illustrating Modern Data Archtecture with Hortonworks Data Platform, we have developed a centralized management system that can help reduce risk and lower the total cost of operations. This system can take into consideration adverse weather conditions, the driver’s driving patterns, current traffic conditions and other criteria to alert and inform the management staff and the drivers themselves when risk factors run high.&lt;/p&gt;
@@ -869,10 +869,10 @@ tuple.getStringByField(TruckScheme.FIELD_LONGITUDE));
     
     <item>
       <title>Introducing Apache Hadoop to Developers</title>
-      <link>http://localhost:1313/posts/Introducing%20Apache%20Hadoop%20to%20Developers/</link>
+      <link>/posts/Introducing%20Apache%20Hadoop%20to%20Developers/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 -0820</pubDate>
       
-      <guid>http://localhost:1313/posts/Introducing%20Apache%20Hadoop%20to%20Developers/</guid>
+      <guid>/posts/Introducing%20Apache%20Hadoop%20to%20Developers/</guid>
       <description>
 
 &lt;h1 id=&#34;introducing-apache-hadoop-to-developers:0a3b4c8f5f9052cb439b35757c54a7bb&#34;&gt;Introducing Apache Hadoop to Developers&lt;/h1&gt;
@@ -1151,10 +1151,10 @@ tuple.getStringByField(TruckScheme.FIELD_LONGITUDE));
     
     <item>
       <title>How To Process Data with Apache Pig</title>
-      <link>http://localhost:1313/posts/How%20To%20Process%20Data%20with%20Apache%20Pig/</link>
+      <link>/posts/How%20To%20Process%20Data%20with%20Apache%20Pig/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 -0810</pubDate>
       
-      <guid>http://localhost:1313/posts/How%20To%20Process%20Data%20with%20Apache%20Pig/</guid>
+      <guid>/posts/How%20To%20Process%20Data%20with%20Apache%20Pig/</guid>
       <description>
 
 &lt;h3 id=&#34;what-is-pig:2a7125070cad15a430fa7d68d009d8bd&#34;&gt;What is Pig?&lt;/h3&gt;
@@ -1273,10 +1273,10 @@ dump join_data;
     
     <item>
       <title>How To Process Data with Apache Hive</title>
-      <link>http://localhost:1313/posts/How%20To%20Process%20Data%20with%20Apache%20Hive/</link>
+      <link>/posts/How%20To%20Process%20Data%20with%20Apache%20Hive/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 -0805</pubDate>
       
-      <guid>http://localhost:1313/posts/How%20To%20Process%20Data%20with%20Apache%20Hive/</guid>
+      <guid>/posts/How%20To%20Process%20Data%20with%20Apache%20Hive/</guid>
       <description>
 
 &lt;p&gt;This tutorial was derived from material in the Hortonworks developer training. These classes cover uses of the tools in the Hortonworks Data Platform and how to develop applications and projects using the Hortonworks Data Platform. You can find more information about this subject at &lt;a href=&#34;http://hortonworks.com/training/class/hadoop-2-data-analysis-pig-hive/&#34;&gt;Data Analysis with Pig &amp;amp; Hive&lt;/a&gt;&lt;/p&gt;
@@ -1433,10 +1433,10 @@ ON (a.year = b.year AND a.runs = b.runs) ;
     
     <item>
       <title>Faster Pig with Tez</title>
-      <link>http://localhost:1313/posts/Faster%20Pig%20with%20Tez/</link>
+      <link>/posts/Faster%20Pig%20with%20Tez/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 -0802</pubDate>
       
-      <guid>http://localhost:1313/posts/Faster%20Pig%20with%20Tez/</guid>
+      <guid>/posts/Faster%20Pig%20with%20Tez/</guid>
       <description>
 
 &lt;h3 id=&#34;what-is-pig:8f9c2da6dd114e1acd205d858c272182&#34;&gt;What is Pig?&lt;/h3&gt;
@@ -1550,10 +1550,10 @@ DUMP join_data;
     
     <item>
       <title>Hello World</title>
-      <link>http://localhost:1313/posts/Hello%20World%20-%20An%20introduction%20to%20Hadoop%20with%20Hive%20and%20Pig/</link>
+      <link>/posts/Hello%20World%20-%20An%20introduction%20to%20Hadoop%20with%20Hive%20and%20Pig/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 -0801</pubDate>
       
-      <guid>http://localhost:1313/posts/Hello%20World%20-%20An%20introduction%20to%20Hadoop%20with%20Hive%20and%20Pig/</guid>
+      <guid>/posts/Hello%20World%20-%20An%20introduction%20to%20Hadoop%20with%20Hive%20and%20Pig/</guid>
       <description>
 
 &lt;h1 id=&#34;hello-world-an-introduction-to-hadoop-with-hive-and-pig:c4646bf119986fba0efcf7fe4daeae11&#34;&gt;Hello World! – An introduction to Hadoop with Hive and Pig&lt;/h1&gt;
@@ -1898,19 +1898,19 @@ line is executed.&lt;/p&gt;
     
     <item>
       <title>first</title>
-      <link>http://localhost:1313/posts/first/</link>
+      <link>/posts/first/</link>
       <pubDate>Fri, 06 Feb 2015 11:58:26 PST</pubDate>
       
-      <guid>http://localhost:1313/posts/first/</guid>
+      <guid>/posts/first/</guid>
       <description></description>
     </item>
     
     <item>
       <title></title>
-      <link>http://localhost:1313/posts/Simulating%20and%20transporting%20Realtime%20event%20stream%20with%20Apache%20Kafka/</link>
+      <link>/posts/Simulating%20and%20transporting%20Realtime%20event%20stream%20with%20Apache%20Kafka/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 UT</pubDate>
       
-      <guid>http://localhost:1313/posts/Simulating%20and%20transporting%20Realtime%20event%20stream%20with%20Apache%20Kafka/</guid>
+      <guid>/posts/Simulating%20and%20transporting%20Realtime%20event%20stream%20with%20Apache%20Kafka/</guid>
       <description>
 
 &lt;h1 id=&#34;new-simulating-and-transporting-realtime-event-stream-with-apache-kafka:630e43e8c7d3cf4336a36284dae8b65f&#34;&gt;NEW: Simulating and transporting Realtime event stream with Apache Kafka&lt;/h1&gt;
