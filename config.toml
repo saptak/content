@@ -1,3 +1,14 @@
 languageCode = "en-us"
-title = "saptak"
-canonifyurls = true
+title = "@saptak"
+canonifyurls = false
+baseurl = "http://saptak.github.io"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[params]
+  	Description = "saptak.github.io"
+  	author = "Saptak Sen"
+	twitter = "saptak"
+	github = "saptak"

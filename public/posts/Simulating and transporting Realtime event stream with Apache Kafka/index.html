@@ -1,0 +1,424 @@
+	
+	<!doctype html>
+<html lang="en">
+  <head>    
+    <title>@saptak - </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    
+    <link href="/css/milk.min.css" rel="stylesheet">
+    <link href="/css/milk-responsive.min.css" rel="stylesheet">     
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/css/fonts.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="shortcut icon" href="/images/alexfinn.ico"> 
+    <link rel="apple-touch-icon" href="">
+    <link rel="canonical" href="http://saptak.github.io/posts/Simulating%20and%20transporting%20Realtime%20event%20stream%20with%20Apache%20Kafka/">
+
+    
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="@saptak">    
+
+  </head>
+  <body>    
+    <div class="navbar navbar-fixed-top">        
+  <div id="navbar-inner">
+          <div id="logo">
+            <a href="http://saptak.in"><img src="/images/letter-a.png" width="100px"></img></a>
+          </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="content">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="posts">
+      
+
+	    
+	  <div class="post">
+	    <header class="post-header">
+	        <h1><a href="/posts/Simulating%20and%20transporting%20Realtime%20event%20stream%20with%20Apache%20Kafka/"></a></h1>
+	        <div class="post-time">January 1 0001</div>
+	    </header>
+	    <div class="post-after">
+	        <div class="tags">
+	            
+	        </div>
+	    </div>
+	    <hr>
+	    <div class="post content">
+	        
+
+<h1 id="new-simulating-and-transporting-realtime-event-stream-with-apache-kafka:630e43e8c7d3cf4336a36284dae8b65f">NEW: Simulating and transporting Realtime event stream with Apache Kafka</h1>
+
+<p>This tutorial will show how geo-location information from trucks can be combined with sensors on roads which report real-time events like speeding, lane-departure, unsafe tailgating, and unsafe following distances. <a href="http://kafka.apache.org/"><strong>Apache Kafka</strong></a> can be used on the Hortonworks Data Platform to capture these data real-time events. In coming tutorials, we will persist them to different data stores/queue (HBase, HDFS, ActiveMQ) for further analysis.</p>
+
+<p><a href="http://kafka.apache.org/"><strong>Apache Kafka</strong></a> is an open source messaging system designed for:</p>
+
+<ul>
+<li>Persistent messaging</li>
+<li>High throughput</li>
+<li>Distributed</li>
+<li>Multi-client support</li>
+<li>Real time
+<img src="http://hortonassets.s3.amazonaws.com/mda/Screen+Shot+2014-07-08+at+9.24.54+PM.png" alt="Kafka Producer-Broker-Consumer" />
+<br />
+Kafka Producer-Broker-Consumer</li>
+</ul>
+
+<p>In this tutorial, you will learn the following topics:</p>
+
+<ol>
+<li>Install and Start Kafka on <a href="http://hortonworks.com/products/hortonworks-sandbox/">Hortonworks Sandbox</a>.</li>
+<li>Review Kafka and ZooKeeper Configs</li>
+<li>Create Kafka topics for Truck events.</li>
+<li>Writing Kafka Producers for Truck events.</li>
+</ol>
+
+<h2 id="prerequisites:630e43e8c7d3cf4336a36284dae8b65f">Prerequisites</h2>
+
+<p>A working Hadoop cluster : the easiest way to get a pre-configured and fully functional Hadoop cluster is to download the <a href="http://hortonworks.com/products/hortonworks-sandbox/">Hortonworks SandBox</a>.</p>
+
+<h2 id="tutorial:630e43e8c7d3cf4336a36284dae8b65f">Tutorial</h2>
+
+<h3 id="step-1:630e43e8c7d3cf4336a36284dae8b65f">Step 1:</h3>
+
+<p><strong>Login to Hortonworks Sandbox.</strong></p>
+
+<p>After downloading the Sandbox and running the VM, login to Ambari using the URL <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a>.</p>
+
+<p>The username and password is <code>admin</code> and <code>admin</code>.</p>
+
+<h3 id="step-2:630e43e8c7d3cf4336a36284dae8b65f">Step 2:</h3>
+
+<p><strong>Setup Kafka.</strong></p>
+
+<ol>
+<li>After login to Ambari, select Actions -&gt; Add Service:<br /></li>
+</ol>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image01.png" alt="" />
+</p>
+
+<ol>
+<li>Select Kafka from the list of Services and click Next:<br /></li>
+</ol>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image04.png" alt="" />
+</p>
+
+<ol>
+<li>Keep clicking <code>Next</code> with the selcted defaults until you reach the following screen:<br /></li>
+</ol>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image07.png" alt="" />
+</p>
+
+<p>Add logs.dir = <code>/tmp/kafka-logs</code></p>
+
+<ol>
+<li>Deploy<br /></li>
+</ol>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image10.png" alt="" />
+</p>
+
+<ol>
+<li>Check Progress<br /></li>
+</ol>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image13.png" alt="" />
+</p>
+
+<p>After successful Start you may be asked to restart some dependent Services like Nagios. Please select the appropriate Services and click Restart.</p>
+
+<p>4.Setting up Kafka on Sandbox with ZooKeeper.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/Screen+Shot+2014-07-08+at+10.33.50+PM.png" alt="Single Broker based Kakfa cluster" />
+</p>
+
+<p>Kafka provides the default and simple ZooKeeper configuration file used for launching a single local ZooKeeper instance. Here, ZooKeeper serves as the coordination interface between the Kafka broker and consumers.</p>
+
+<p>The important Zookeeper properties can be checked in Ambari as below:</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image16.png" alt="" />
+</p>
+
+<p>Ensure the following value of clientPort under Ambari</p>
+
+<p>clientPort=2181. By default ZooKeeper server listens on port number 2181.</p>
+
+<p>Also verify if zookeeper service is running:</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image19.png" alt="" />
+</p>
+
+<p>If this port 2181 is busy or is consumed by other processes, then you could change the default port number of ZooKeeper to any other valid port number.</p>
+
+<p>In case zookeeper is not running, you can start the Zookeeper service from Ambari:</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image22.png" alt="" />
+</p>
+
+<h3 id="step-3:630e43e8c7d3cf4336a36284dae8b65f">Step 3:</h3>
+
+<p><strong>Verify Kafka Broker.</strong></p>
+
+<p>Verify the ‘zookeeper.connect’ parameter to point to port number 2181.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/kafka/image25.png" alt="" />
+</p>
+
+<p>we will SSH in to follow the rest of the steps.</p>
+
+<p>ssh root@127.0.0.1 -p 2222;</p>
+
+<p>the password is hadoop</p>
+
+<p>Check running java processes using the “jps” command.</p>
+
+<p>This command should list Kafka and QuorumPeerMain</p>
+
+<p>jps</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/Check+Kafka+Running.png" alt="check Kafka running" />
+<br />
+check Kafka running</p>
+
+<h3 id="step-4:630e43e8c7d3cf4336a36284dae8b65f">Step 4:</h3>
+
+<p><code>cd /usr/hdp/2.2.0.0-1084/kafka</code></p>
+
+<p><strong>Create Kafka topics for truck event.</strong></p>
+
+<p>Execute this command to create Topics for ‘truckevent&rsquo;:</p>
+
+<pre><code>bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic truckevent
+</code></pre>
+
+<p>Note: Sometimes Kafka does not listen to localhost, you may need to use IP instead.</p>
+
+<p>Check if topic ‘truckevent’ was created successfully with the following command:</p>
+
+<pre><code>bin/kafka-topics.sh --list --zookeeper localhost:2181
+</code></pre>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/Kafka+Topics.png" alt="Kafka Topics" />
+<br />
+Kafka Topics</p>
+
+<h3 id="step-5:630e43e8c7d3cf4336a36284dae8b65f">Step 5:</h3>
+
+<p><strong>Writing Kafka Producers for truck events.</strong></p>
+
+<p>Producers are applications that create Messages and publish them to the Kafka broker for further consumption.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/Screen+Shot+2014-07-09+at+12.31.03+AM.png" alt="Kafka Producers for truck events" />
+<br />
+Kafka Producers for truck events</p>
+
+<p>In this tutorial we shall use a Java API to produce Truck events.</p>
+
+<p>The Java code in <code>TruckEventsProducer.java</code> will generate data with following columns:</p>
+
+<pre><code> `driver_name` string,  
+ `driver_id` string,  
+ `route_name` string,  
+ `route_id` string,  
+ `truck_id` string,  
+ `timestamp` string,  
+ `longitude` string,  
+ `latitude` string,  
+ `violation` string,  
+ `total_violations` string
+</code></pre>
+
+<p>This Java Truck events producer code uses <a href="http://www.nyc.gov/html/dot/downloads/misc/all_truck_routes_nyc.kml">New York City Truck Routes (kml)</a> file which defines road paths with Latitude and Longitude information.</p>
+
+<p>The Truck Events Producer java code and the NYC Truck routes kml file can be downloaded with following commands.</p>
+
+<pre><code>mkdir /opt/TruckEvents  
+cd /opt/TruckEvents  
+wget http://hortonassets.s3.amazonaws.com/mda/Tutorials-master.zip  
+unzip Tutorials-master.zip
+</code></pre>
+
+<h3 id="step-6:630e43e8c7d3cf4336a36284dae8b65f">Step 6:</h3>
+
+<p><strong>Compiling with Maven.</strong></p>
+
+<p>Download and extract Apache Maven as shown in the commands below and set up the environment ‘PATH’ variable.</p>
+
+<pre><code>wget http://www.carfab.com/apachesoftware/maven/maven-3/3.2.2/binaries/apache-maven-3.2.2-bin.tar.gz  
+tar xvf apache-maven-3.2.2-bin.tar.gz  
+mv apache-maven-3.2.2 /usr/local/  
+export PATH=/usr/local/apache-maven-3.2.2/bin:$PATH  
+mvn -version
+</code></pre>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/maven+version.png" alt="Maven Version" />
+<br />
+Maven Version</p>
+
+<p>Add <code>export PATH=/usr/local/apache-maven-3.2.2/bin:$PATH</code> to the <code>~/.bashrc</code> file to auto set the values for <code>$PATH</code>.</p>
+
+<p>Now lets compile and execute the code to generate Truck Events.</p>
+
+<pre><code>cd /opt/TruckEvents/Tutorials-master  
+mvn clean package
+</code></pre>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/mvn+clean+package.png" alt="mvn clean pacakge" />
+<br />
+mvn clean pacakge</p>
+
+<p>Once the code is successfully compiled we shall see a new target directory created in the current folder. The binaries for all the Tutorials are in this target directory and the source code in src. To start the Kafka Producer we execute the following command to see the output as shown in the screenshot below.</p>
+
+<pre><code>java -cp target/Tutorial-1.0-SNAPSHOT.jar com.hortonworks.tutorials.tutorial1.TruckEventsProducer localhost:9092 localhost:2181 &amp;
+</code></pre>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/start+kafka+producer.png" alt="TruckEventsProducer Running" />
+<br />
+TruckEventsProducer Running</p>
+
+<p>We have now successfully compiled and have the Kafka producer publishing messages to the Kafka cluster.</p>
+
+<p>To verify, execute the following command:</p>
+
+<pre><code>[root@sandbox ]# /usr/hdp/2.2.0.0-1084/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic truckevent --from-beginning  
+SLF4J: Failed to load class &quot;org.slf4j.impl.StaticLoggerBinder&quot;.  
+SLF4J: Defaulting to no-operation (NOP) logger implementation  
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.  
+2014-07-14 20:25:13.423|01|11|Unsafe following distance|    -74.01214432911161|40.70899264449202  
+2014-07-14 20:25:14.193|02|12|Unsafe tail distance| -74.01214432911161|40.70899264449202  
+2014-07-14 20:25:14.207|03|13|Overspeed|    -74.01214432911161|40.70899264449202  
+2014-07-14 20:25:14.22|02|12|Overspeed| -74.01150567251823|40.70295884274092  
+2014-07-14 20:25:14.236|03|13|Normal|   -74.01150567251823|40.70295884274092  
+2014-07-14 20:25:14.253|02|12|Unsafe following distance|    -74.01150567251823|40.70295884274092  
+2014-07-14 20:25:14.263|03|13|Lane Departure|   -74.01046533975128|40.71153454636318  
+2014-07-14 20:25:14.271|02|12|Lane Departure|   -74.01046533975128|40.71153454636318
+</code></pre>
+
+<p>To stop kafka, you can use the command:</p>
+
+<pre><code>service kafka stop
+</code></pre>
+
+<h2 id="producer-code-description:630e43e8c7d3cf4336a36284dae8b65f">Producer Code description</h2>
+
+<p>We use the TruckEventsProducer.java file under the src/main/java/tutorial1/ directory to generate the Kafka TruckEvents. This uses the all_truck_routes_nyc.kml data file available from <a href="http://www.nyc.gov/html/dot/html/motorist/trucks.shtml">NYC DOT</a>. We use Java API’s to produce Truck Events.</p>
+
+<pre><code>[root@sandbox ~]# ls /opt/TruckEvents/Tutorials-master/src/main/java/tutorial1/TruckEventsProducer.java  
+[root@sandbox ~]# ls /opt/TruckEvents/Tutorials-master/src/main/resources/all_truck_routes_nyc.kml
+</code></pre>
+
+<p>The java file contains 3 functions</p>
+
+<ul>
+<li><strong>public class TruckEventsProducer</strong></li>
+</ul>
+
+<p>We configure the Kafka producer in this function to serialize and send the data to Kafka Topic ‘truckevent’ created in the tutorial. The code below shows the Producer <k, v="" style="box-sizing: border-box;">class used to generate messages.</p>
+
+<pre><code>String TOPIC = &quot;truckevent&quot;;  
+ProducerConfig config = new ProducerConfig(props);  
+Producer&lt;String, String&gt; producer = new Producer&lt;String, String&gt;(config);
+</code></pre>
+
+<p>The properties of the producer are defined in the ‘props’ variable. The events, truckIds and the driverIds data is selected with random function from the array variables.</p>
+
+<pre><code>Properties props = new Properties();  
+props.put(&quot;metadata.broker.list&quot;, args[0]);  
+props.put(&quot;zk.connect&quot;, args[1]);  
+props.put(&quot;serializer.class&quot;, &quot;kafka.serializer.StringEncoder&quot;);  
+props.put(&quot;request.required.acks&quot;, &quot;1&quot;);
+
+
+
+String[] events = {&quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Lane Departure&quot;, &quot;Overspeed&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Lane Departure&quot;,&quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;,  &quot;Unsafe tail distance&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Unsafe following distance&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Normal&quot;, &quot;Overspeed&quot;, &quot;Normal&quot;, &quot;Normal&quot;, };  
+String[] truckIds = {&quot;01&quot;, &quot;02&quot;, &quot;03&quot;};  
+String[] driverIds = {&quot;11&quot;, &quot;12&quot;, &quot;13&quot;};
+</code></pre>
+
+<p>KeyedMessage class takes the topic name, partition key, and the message value that needs to be passed from the producer as follows:</p>
+
+<p><strong>class KeyedMessage<a href="http://hortonworks.com/hadoop-tutorial/simulating-transporting-realtime-events-stream-apache-kafka/val%20topic:%20String,%20val%20key:%20K,%20val%20message:%20V">K, V</a></strong></p>
+
+<pre><code>KeyedMessage&lt;String, String&gt; data = new KeyedMessage&lt;String, String&gt;(TOPIC, finalEvent);
+</code></pre>
+
+<p>The Kafka producer events with timestamps are created by selecting the data from above arrays and geo location from the all_truck_routes_nyc.kml file.</p>
+
+<pre><code>KeyedMessage&lt;String, String&gt; data = new KeyedMessage&lt;String, String&gt;(TOPIC, finalEvent);  
+LOG.info(&quot;Sending Messge #:&quot; + i +&quot;, msg:&quot; + finalEvent);  
+producer.send(data);  
+Thread.sleep(1000);'
+</code></pre>
+
+<p>To transmit the data we now build an array using the GetKmlLangList() and getLatLong() function.</p>
+
+<ul>
+<li><strong>private static String getLatLong</strong></li>
+</ul>
+
+<p>This function returns coordinates in Latitude and Longitude format.</p>
+
+<pre><code> if (latLong.length == -1)  
+ {
+    return latLong[1].trim() + &quot;|&quot; + latLong[0].trim();  
+ }
+</code></pre>
+
+<ul>
+<li><strong>public static String[] GetKmlLanLangList</strong></li>
+</ul>
+
+<p>This method is reading KML file which is an XML file. This xml file is loaded in File fXmlFile variable.</p>
+
+<pre><code>File fXmlFile = new File(urlString);
+</code></pre>
+
+<p>Which will parse this file by running through each node (Node.ELEMENT_NODE) in loop. The XML element &ldquo;coordinates&rdquo; has array of two items lat, long. The function reads the lat, long and returns the values in array.</p>
+
+<p>This tutorial gives you brief glimpse of how to use Apache Kafka to transport real-time events data.</p>
+
+	    </div>
+	    
+	<div class="about">
+	<p> 
+     
+    </p>
+</div>
+		<nav id="pagination">
+			<a class="prev" href="http://saptak.github.io/posts/first/">Prev</a>
+			
+		</nav>
+	
+		        <footer>
+		        	Powered by <a href="https://github.com/saptak">GitHub</a> 
+		        	<p>© Saptak Sen 2015</p>
+		        </footer>
+		    </div>
+		  </div>    
+		</div>
+      </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + ":change-me";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 4]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="http://change-me" style="border:0;" alt="" /></p></noscript>
+
+
+</html>

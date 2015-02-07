@@ -1,0 +1,429 @@
+	
+	<!doctype html>
+<html lang="en">
+  <head>    
+    <title>@saptak - Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    
+    <link href="/css/milk.min.css" rel="stylesheet">
+    <link href="/css/milk-responsive.min.css" rel="stylesheet">     
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/css/fonts.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="shortcut icon" href="/images/alexfinn.ico"> 
+    <link rel="apple-touch-icon" href="">
+    <link rel="canonical" href="http://saptak.github.io/posts/Hello%20World%20-%20An%20introduction%20to%20Hadoop%20with%20Hive%20and%20Pig/">
+
+    
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="@saptak">    
+
+  </head>
+  <body>    
+    <div class="navbar navbar-fixed-top">        
+  <div id="navbar-inner">
+          <div id="logo">
+            <a href="http://saptak.in"><img src="/images/letter-a.png" width="100px"></img></a>
+          </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="content">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="posts">
+      
+
+	    
+	  <div class="post">
+	    <header class="post-header">
+	        <h1><a href="/posts/Hello%20World%20-%20An%20introduction%20to%20Hadoop%20with%20Hive%20and%20Pig/">Hello World</a></h1>
+	        <div class="post-time">February 6 2015</div>
+	    </header>
+	    <div class="post-after">
+	        <div class="tags">
+	            
+	        </div>
+	    </div>
+	    <hr>
+	    <div class="post content">
+	        
+
+<h1 id="hello-world-an-introduction-to-hadoop-with-hive-and-pig:c4646bf119986fba0efcf7fe4daeae11">Hello World! – An introduction to Hadoop with Hive and Pig</h1>
+
+<p>The tutorials are presented in sections as listed below.</p>
+
+<ul>
+<li><a href="http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#overview">Overview of Apache Hadoop and Hortonworks Data Platform</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#usingHDP">Using HDP</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#loading">Loading the sample data into HCatalog</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#hive">A Short Apache Hive Tutorial</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#pig">Pig Basics Tutorial</a></li>
+</ul>
+
+<h3 id="overview-of-apache-hadoop-and-hortonworks-data-platform:c4646bf119986fba0efcf7fe4daeae11">Overview of Apache Hadoop and Hortonworks Data Platform</h3>
+
+<p>The Hortonworks Sandbox is a single node implementation of the Hortonworks Data Platform(HDP). It is packaged as a virtual machine to make evaluation and experimentation with HDP fast and easy. The tutorials and features in the Sandbox are oriented towards exploring how HDP can help you solve your business big data problems. The Sandbox tutorials will walk you through bringing some sample data into HDP and manipulate it using the tools built into HDP. The idea is to show you how you can get started and show you how to accomplish tasks in HDP. HDP is free to download and use in your enterprise and you can download it here: <a href="http://hortonworks.com/download/">Hortonworks Data Platform<br />
+Download</a></p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/yahoo_data_nodes-a.png?raw=true" alt="Yahoo Data Nodes" />
+</p>
+
+<p>The Apache Hadoop projects provide a series of tools designed to solve big data problems. The Hadoop cluster implements a parallel computing cluster using inexpensive commodity hardware. The cluster is partitioned across many servers to provide a near linear scalability. The philosophy of the cluster design is to bring the computing to the data. So each datanode will hold part of the overall data and be able to process the data that it holds. The overall framework for the processing software is called MapReduce. Here&rsquo;s a short video introduction to MapReduce: <a href="http://www.youtube.com/watch?v=ht3dNvdNDzI">Introduction to MapReduce</a></p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/yahoo_map_reduce-a.png?raw=true" alt="Yahoo Map Reduce" />
+</p>
+
+<p>Apache Hadoop can be useful across a range of use cases spanning virtually every vertical industry. It is becoming popular anywhere that you need to store, process, and analyze large volumes of data. Examples include digital marketing automation, fraud detection and prevention, social network and relationship analysis, predictive modeling for new drugs, retail in-store behavior analysis, and mobile device location-based marketing.</p>
+
+<hr />
+
+<h3 id="the-hadoop-distributed-file-system:c4646bf119986fba0efcf7fe4daeae11">The Hadoop Distributed File System</h3>
+
+<p>In this section we are going to take a closer look at some of the components we will be using in the Sandbox tutorials. Underlying all of these components is the Hadoop Distributed File System(HDFS™). This is the foundation of the Hadoop cluster. The HDFS file system manages how the datasets are stored in the Hadoop cluster. It is responsible for distributing the data across the datanodes, managing replication for redundancy and administrative tasks like adding, removing and recovery of datanodes.</p>
+
+<h3 id="apache-hive:c4646bf119986fba0efcf7fe4daeae11">Apache Hive™</h3>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/hive_ui_overview-b.jpg?raw=true" alt="Hive UI Overview" />
+</p>
+
+<p>The Apache Hive project provides a data warehouse view of the data in HDFS. Using a SQL-like language Hive lets you create summarizations of your data, perform ad-hoc queries, and analysis of large datasets in the Hadoop cluster. The overall approach with Hive is to project a table structure on the dataset and then manipulate it with HiveQL. Since you are using data in HDFS your operations can be scaled across all the datanodes and you can manipulate huge datasets.</p>
+
+<h3 id="apache-hcatalog:c4646bf119986fba0efcf7fe4daeae11">Apache HCatalog</h3>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/hcat_ui_overview-a.jpg?raw=true" alt="HCat UI Overview" />
+</p>
+
+<p>The function of HCatalog is to hold location and metadata about the data in a Hadoop cluster. This allows scripts and MapReduce jobs to be decoupled from data location and metadata like the schema. Additionally since HCatalog supports many tools, like Hive and Pig, the location and metadata can be shared between tools. Using the open APIs of HCatalog other tools like Teradata Aster can also use the location and metadata in HCatalog. In the tutorials we will see how we can now reference data by name and we can inherit the location and metadata.</p>
+
+<h3 id="apache-pig:c4646bf119986fba0efcf7fe4daeae11">Apache Pig™</h3>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/pig_ui_overview-a.jpg?raw=true" alt="Pig UI Overview" />
+</p>
+
+<p>Pig is a language for expressing data analysis and infrastructure processes. Pig is translated into a series of MapReduce jobs that are run by the Hadoop cluster. Pig is extensible through user-defined functions that can be written in Java and other languages. Pig scripts provide a high level language to create the MapReduce jobs needed to process data in a Hadoop cluster.</p>
+
+<p>That‘s all for now… let‘s get started with some examples of using these tools together to solve real problems!</p>
+
+<h3 id="using-hdp:c4646bf119986fba0efcf7fe4daeae11">Using HDP</h3>
+
+<p>Here we go! We&rsquo;re going to walk you through a series of step-by-step tutorials to get you up and running with the Hortonworks Data Platform(HDP).</p>
+
+<h3 id="downloading-example-data:c4646bf119986fba0efcf7fe4daeae11">Downloading Example Data</h3>
+
+<p>We&rsquo;ll need some example data for our lessons. For our first lesson, we&rsquo;ll be using stock ticker data from the New York Stock Exchange from the years 2000-2001. You can download this file here:</p>
+
+<p><a href="https://s3.amazonaws.com/hw-sandbox/tutorial1/NYSE-2000-2001.tsv.gz">https://s3.amazonaws.com/hw-sandbox/tutorial1/NYSE-2000-2001.tsv.gz</a></p>
+
+<p>The file is about 11 megabytes, and may take a few minutes to download. Fortunately, to learn &lsquo;Big Data&rsquo; you don&rsquo;t have to use a massive dataset. You need only use tools that scale to massive datasets. Click and save this file to your computer.</p>
+
+<h3 id="using-the-file-browser:c4646bf119986fba0efcf7fe4daeae11">Using the File Browser</h3>
+
+<p>To access Hue, go to <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> with your browser. Use the following username and password
+  User: Hue; Password: 1111</p>
+
+<p>You can reach the File Browser by clicking its icon:</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/pick_file_browser-a.jpg?raw=true" alt="Pick File Browser" />
+</p>
+
+<p>The File Browser interface should be familiar to you as it is similar to the file manager on a Windows PC or Mac. We begin in our home directory. This is where we&rsquo;ll store the results of our work. File Browser also lets us upload files.</p>
+
+<h3 id="uploading-a-file:c4646bf119986fba0efcf7fe4daeae11">Uploading a File</h3>
+
+<p>To upload the example data you just downloaded,</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/select_file_upload.jpg?raw=true" alt="Select File Upload" />
+</p>
+
+<ul>
+<li>Select the &lsquo;Upload&rsquo; button</li>
+<li>Select &lsquo;Files&rsquo; and a pop-up window will appear.</li>
+<li>Click the button which says, &lsquo;Upload a file&rsquo;.</li>
+<li>Locate the example data file you downloaded and select it.</li>
+<li>A progress meter will appear. The upload may take a few moments.</li>
+</ul>
+
+<p>When it is complete you&rsquo;ll see this:</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/uploaded_stock_data.jpg?raw=true" alt="Uploaded Stock Data" />
+</p>
+
+<p>Now click the file name &ldquo;NYSE-2000-2001.tar.gz&rdquo;. You&rsquo;ll see it, displayed in tabular form:</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/view_stock_data.jpg?raw=true" alt="View Stock Data" />
+</p>
+
+<p>You can use File Browser just like your own computer&rsquo;s file manager. Next register the dataset with HCatalog.</p>
+
+<h3 id="loading-the-sample-data-into-hcatalog:c4646bf119986fba0efcf7fe4daeae11">Loading the sample data into HCatalog</h3>
+
+<p>Now that we&rsquo;ve uploaded a file to HDFS, we will register it with HCatalog to be able to access it in both Pig and Hive.</p>
+
+<p>Select the HCatalog icon in the icon bar at the top of the page:</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/select_hcat.jpg?raw=true" alt="Select HCat" />
+</p>
+
+<p>Select &ldquo;Create a new table from file&rdquo; from the Actions menu on the left.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/hcat_create_table.jpg?raw=true" alt="HCat Create Table" />
+</p>
+
+<p>Fill in the Table Name field with &lsquo;nyse_stocks&rsquo;. Then click on Choose a file button. Select the file we just uploaded &lsquo;NYSE-2000-2001.tsv.gz&rsquo;.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/hcat_choose_file-b.jpg?raw=true" alt="HCat Choose File" />
+</p>
+
+<p>You will now see the options for importing your file into a table. The File options should be fine. In Table preview set all text type fields to Column Type &lsquo;string&rsquo; and all decimal fields (ex: 12.55) to Column Type &lsquo;float.&rsquo; The one exception is &lsquo;stock_volume&rsquo; field should be set as &lsquo;bigint.&rsquo; When everything is complete click on the &ldquo;Create Table&rdquo; button at the bottom.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/hcat_define_columns.jpg?raw=true" alt="HCat Define Columns" />
+</p>
+
+<h3 id="a-short-apache-hive-tutorial:c4646bf119986fba0efcf7fe4daeae11">A Short Apache Hive Tutorial</h3>
+
+<p>In the previous sections you:</p>
+
+<ul>
+<li>Uploaded your data file into HDFS</li>
+<li>Used Apache HCatalog to create a table</li>
+</ul>
+
+<p>Apache Hive™ provides a data warehouse function to the Hadoop cluster. Through the use of HiveQL you can view your data as a table and create queries like you would in a database.</p>
+
+<p>To make it easy to interact with Hive we use a tool in the Hortonworks Sandbox called Beeswax. Beeswax gives us an interactive interface to Hive. We can type in queries and have Hive evaluate them for us using a series of MapReduce jobs.</p>
+
+<p>Let&rsquo;s open Beeswax. Click on the bee icon on the top bar.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/1-beeswax.jpg?raw=true" alt="Beeswax" />
+</p>
+
+<p>On the right hand side there is a query window and an execute button. We will be typing our queries in the query window. When you are done with a query please click on the execute button. Note: There is a limitation of one query in the composition window. You can not type multiple queries separated by semicolons.</p>
+
+<p>Since we created our table in HCatalog, Hive automatically knows about it. We can see the tables that Hive knows about by clicking on the Tables tab.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/2-tables.jpg?raw=true" alt="Tables" />
+</p>
+
+<p>In the list of the tables you will see our table, <code>nyse_stocks</code>. Hive inherits the schema and location information from HCatalog. This separates meta information like schema and location from the queries. If we did not have HCatalog we would have to build the table by providing location and schema information.</p>
+
+<p>We can see the records by typing <code>Select * from nyse_stocks</code> in the Query window. Our results would be:</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/3-data-table.jpg?raw=true" alt="Data Table" />
+</p>
+
+<p>We can see the columns in the table by executing <code>describe nyse_stocks</code></p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/4-describe-nyse_stocks.jpg?raw=true" alt="NYSE" />
+</p>
+
+<p>We will then get a description of the nyse table.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/5-describe-nyse_stocks-results.jpg?raw=true" alt="Describe NYSE Table" />
+</p>
+
+<p>We can count the records with the query <code>select count(*) from nyse_stocks</code>. You can click on the Beeswax icon to get back to the query screen. Evaluate the expression by typing it in the query window and hitting execute.
+I4HP4F</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/select-count.jpg?raw=true" alt="Select Count" />
+</p>
+
+<p>This job takes longer and you can watch the job running in the log. When the job is complete you will see the results posted in the Results tab.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/select-count-results.jpg?raw=true" alt="Select Count Results" />
+</p>
+
+<p>You can select specific records by using a query like <code>select * from nyse_stocks where stock_symbol=&quot;IBM&quot;</code>.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/select-IBM.jpg?raw=true" alt="Select IBM" />
+</p>
+
+<p>This will return the records with IBM.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/select-ibm-results.jpg?raw=true" alt="Select IBM Results" />
+</p>
+
+<p>So we have seen how we can use Apache Hive to easily query our data in HDFS using the Apache Hive query language. We took full advantage of HCatalog so we did not have to specify our schema or location of the data. Apache Hive allows people who are knowledgable in query languages like SQL to immediately become productive with Apache Hadoop. Once they know the schema of the data can they quickly and easily formulate queries.</p>
+
+<h3 id="pig-basics-tutorial:c4646bf119986fba0efcf7fe4daeae11">Pig Basics Tutorial</h3>
+
+<p>In this tutorial we create and run Pig scripts. On the left is a list of scripts that we have created. In the middle is an area for us to compose our scripts. We will also load the data from the table we have stored in HCatalog. We will then filter out the records for the stock symbol IBM. Once we have done that we will calculate the average of closing stock prices over this period.</p>
+
+<p>The basic steps will be:</p>
+
+<ul>
+<li>Step 1: Create and name the script</li>
+<li>Step 2: Loading the data</li>
+<li>Step 3: Select all records starting with IBM</li>
+<li>Step 4: iterate and average</li>
+<li>Step 5: save the script and execute it</li>
+</ul>
+
+<p>Let&rsquo;s get started…</p>
+
+<p>To get to the Pig interface click on the Pig icon on the icon bar at the top. This will bring up the Pig user interface. On the left is a list of your scripts and on the right is a composition box for your scripts.</p>
+
+<p>A special feature of the interface is the Pig helper at the bottom. The Pig helper will provide us with templates for the statements, functions, I/O statements, HCatLoader() and Python user defined functions.</p>
+
+<p>At the very bottom are status areas that will show the results of our script and log files</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/PigUI.jpeg" alt="PIG UI" />
+</p>
+
+<h3 id="step-1-create-and-name-the-script:c4646bf119986fba0efcf7fe4daeae11">Step 1: Create and name the script</h3>
+
+<ul>
+<li>Open the Pig interface by clicking the Pig icon at the top of the screen</li>
+</ul>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/image001.1.jpg?raw=true" alt="Image001-1" />
+</p>
+
+<ul>
+<li>Title your script by filling in the title box</li>
+</ul>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/image001.2.jpg?raw=true" alt="Image001-2" />
+</p>
+
+<h3 id="step-2-loading-the-data:c4646bf119986fba0efcf7fe4daeae11">Step 2: Loading the data</h3>
+
+<p>Our first line in the script will load the table. We are going to use HCatalog because this allows us to share schema across tools and users within our Hadoop environment. HCatalog allows us to factor out schema and location information from our queries and scripts and centralize them in a common repository. Since it is in HCatalog we can use the HCatLoader() function. Pig makes it easy by allowing us to give the table a name or alias and not have to worry about allocating space and defining the structure. We just have to worry about how we are processing the table.</p>
+
+<ul>
+<li>On the right hand side we can start adding our code at Line 1</li>
+<li>We can use the Pig helper at the bottom of the screen to give us a template for the line. Click on <code>Pig helper -&gt; HCatalog-&gt;load template</code></li>
+<li>The entry <code>%TABLE%</code> is highlighted in red for us. Type the name of the table which is<code>nyse_stocks</code>.</li>
+<li>Remember to add the <code>a =</code> before the template. This saves the results into <code>a</code>. Note the `= has to have a space before and after it.</li>
+</ul>
+
+<p>Our completed line of code will look like:</p>
+
+<p><code>a = LOAD ‘default.nyse_stocks’ USING org.apache.hive.hcatalog.pig.HCatLoader()</code></p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/line1.jpeg" alt="Line 1" />
+</p>
+
+<p>So now we have our table loaded into Pig and we stored it &ldquo;<code>a</code>&ldquo;</p>
+
+<h3 id="step-3-select-all-records-starting-with-ibm:c4646bf119986fba0efcf7fe4daeae11">Step 3: Select all records starting with IBM</h3>
+
+<p>The next step is to select a subset of the records so that we just have the records for stock ticker of IBM. To do this in Pig we use the Filter operator. We tell Pig to Filter our table and keep all records where stock_symbol=&ldquo;IBM&rdquo; and store this in b. With this one simple statement Pig will look at each record in the table and filter out all the ones that do not meet our criteria. The group statement is important because it groups the records by one or more relations. In this case we just specified all rather than specify the exact relation we need.</p>
+
+<ul>
+<li>We can use Pig Help again by clicking on <code>Pig helper-&gt;Relational Operators-&gt;FILTER</code>template</li>
+<li>We can replace <code>%VAR%</code> with &ldquo;<code>a</code>&rdquo; (hint: tab jumps you to the next field)</li>
+<li>Our <code>%COND% is &quot;</code>stock_symbol ==&lsquo;IBM&rsquo;` &ldquo; (note: single quotes are needed around IBM and don&rsquo;t forget the trailing semi-colon)</li>
+<li><code>Pig helper -&gt; Relational Operators-&gt;GROUP ALL</code> template</li>
+<li>The first <code>%VAR% is &quot;</code>b<code>&quot; and the second</code>%VAR%<code>is &quot;</code>all<code>&quot;. You will need to correct an irregularity in the Pig syntax here. Remove the &quot;</code>BY`&rdquo; in the line of code.</li>
+<li>Again add the trailing semi-colon to the code.</li>
+</ul>
+
+<p>So the final code will look like:</p>
+
+<p><code>b = filter a by stock_symbol == 'IBM';  
+c = group b all;  
+</code></p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/line3.jpeg" alt="Line 3" />
+</p>
+
+<p>Now we have extracted all the records with IBM as the stock_symbol.</p>
+
+<h3 id="step-4-iterate-and-average:c4646bf119986fba0efcf7fe4daeae11">Step 4: Iterate and Average</h3>
+
+<p>Now that we have the right set of records we can iterate through them and create the average. We use the &ldquo;foreach&rdquo; operator on the grouped data to iterate through all the records. The AVG() function creates the average of the stock_volume field. To wind it up we just print out the results which will be a single floating point number. If our results would be used for a future job we can save it back into a table.</p>
+
+<ul>
+<li><code>Pig helper -&gt;Relational Operators-&gt;FOREACH</code> template will get us the code</li>
+<li>Our first <code>%VAR%</code> is <code>c</code> and the second <code>%VAR%</code> is &ldquo;<code>AVG(b.stock_volume);</code>&ldquo;</li>
+<li>We add the last line with <code>Pig helper-&gt;I/O-&gt;DUMP</code> template and replace <code>%VAR%</code> with &ldquo;<code>d</code>&rdquo;.</li>
+</ul>
+
+<p>Our last two lines of the script will look like:</p>
+
+<p><code>d = foreach c generate AVG(b.stock_volume);  
+dump d;  
+</code></p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/line5.jpeg" alt="Line 5" />
+</p>
+
+<p>So the variable &ldquo;<code>d</code>&rdquo; will contain the average volume of IBM stock when this<br />
+line is executed.</p>
+
+<h3 id="step-5-save-the-script-and-execute-it:c4646bf119986fba0efcf7fe4daeae11">Step 5: Save the script and Execute it</h3>
+
+<p>In the pig arguments text box enter <code>-useHCatalog</code>.</p>
+
+<p>Now, we can save our completed script using the Save button at the bottom and then we can Execute it. This will create a MapReduce job(s) and after it runs we will get our results. At the bottom there will be a progress bar that shows the job status.</p>
+
+<ul>
+<li>At the bottom we click on the Save button again</li>
+<li>Then we click on the Execute button to run the script</li>
+<li>Below the Execute button is a progress bar that will show you how things are running.</li>
+<li>When the job completes you will see the results in the green box.</li>
+<li>Click on the Logs link to see what happened when your script ran. This is where you will see any error messages. The log may scroll below the edge of your window so you may have to scroll down.</li>
+</ul>
+
+<p><img src="http://s3.amazonaws.com/hortonassets/Screen%20Shot%202015-01-29%20at%2010.28.35%20AM.png" alt="Final" />
+</p>
+
+<h3 id="summary:c4646bf119986fba0efcf7fe4daeae11">Summary</h3>
+
+<p>Now we have a complete script that computes the average volume of IBM stock. You can download the results by clicking on the green download icon above the green box.</p>
+
+<p><img src="http://raw.github.com/hortonworks/hadoop-tutorials/master/Sandbox/images/tutorial-1/answer.jpeg" alt="Answer" />
+</p>
+
+<p>If you look at what our script has done, you see in Line 5 we:</p>
+
+<ul>
+<li>Pulled in the data from our table using HCatalog, we took advantage that HCatalog provided us with location and schema information, if that needs to change in the future we would not have to rewrite our script.</li>
+<li>Pig then went through all the rows in the table and discarded the ones where the stock_symbol field is not IBM</li>
+<li>Then an index was built for the remaining records</li>
+<li>The average of stock_volume was calculated on the records</li>
+</ul>
+
+<p>We did it with 5 lines of Pig script code!</p>
+
+	    </div>
+	    
+	<div class="about">
+	<p> 
+     
+    </p>
+</div>
+		<nav id="pagination">
+			<a class="prev" href="http://saptak.github.io/posts/Faster%20Pig%20with%20Tez/">Prev</a>
+			<a class="next" href="http://saptak.github.io/posts/first/">Next</a>
+		</nav>
+	
+		        <footer>
+		        	Powered by <a href="https://github.com/saptak">GitHub</a> 
+		        	<p>© Saptak Sen 2015</p>
+		        </footer>
+		    </div>
+		  </div>    
+		</div>
+      </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + ":change-me";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 4]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="http://change-me" style="border:0;" alt="" /></p></noscript>
+
+
+</html>

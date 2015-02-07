@@ -1,0 +1,363 @@
+	
+	<!doctype html>
+<html lang="en">
+  <head>    
+    <title>@saptak - Introducing Apache Hadoop to Developers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    
+    <link href="/css/milk.min.css" rel="stylesheet">
+    <link href="/css/milk-responsive.min.css" rel="stylesheet">     
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/css/fonts.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="shortcut icon" href="/images/alexfinn.ico"> 
+    <link rel="apple-touch-icon" href="">
+    <link rel="canonical" href="http://saptak.github.io/posts/Introducing%20Apache%20Hadoop%20to%20Developers/">
+
+    
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="@saptak">    
+
+  </head>
+  <body>    
+    <div class="navbar navbar-fixed-top">        
+  <div id="navbar-inner">
+          <div id="logo">
+            <a href="http://saptak.in"><img src="/images/letter-a.png" width="100px"></img></a>
+          </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="content">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="posts">
+      
+
+	    
+	  <div class="post">
+	    <header class="post-header">
+	        <h1><a href="/posts/Introducing%20Apache%20Hadoop%20to%20Developers/">Introducing Apache Hadoop to Developers</a></h1>
+	        <div class="post-time">February 6 2015</div>
+	    </header>
+	    <div class="post-after">
+	        <div class="tags">
+	            
+	        </div>
+	    </div>
+	    <hr>
+	    <div class="post content">
+	        
+
+<h1 id="introducing-apache-hadoop-to-developers:0a3b4c8f5f9052cb439b35757c54a7bb">Introducing Apache Hadoop to Developers</h1>
+
+<p>Apache Hadoop is a community driven open-source project goverened by the <a href="http://apache.org/">Apache Software Foundation</a>.</p>
+
+<p>It was originally implemented at Yahoo based on papers published by Google in 2003 and 2004. Hadoop committers today work at several different organizations like Hortonworks, Microsoft, Facebook, Cloudera and many others around the world.</p>
+
+<p>Since then Apache Hadoop was matured and developed to become a data platform for not just processing humongous amount of data in batch but with the advent of <a href="http://hortonworks.com/labs/yarn/">YARN</a> it now supports many diverse workloads such as Interactive queries over large data with <a href="http://hortonworks.com/labs/stinger/">Hive on Tez</a>, Realtime data processing with <a href="http://hortonworks.com/labs/storm/">Apache Storm</a>, super scalable NoSQL datastore like <a href="http://hortonworks.com/hadoop/hbase/">HBase</a>, in-memory datastore like <a href="http://hortonworks.com/hadoop/spark/">Spark</a> and the list goes on.</p>
+
+<p><img src="http://hortonworks.com/wp-content/uploads/2014/09/5-boxes.png" alt="" />
+</p>
+
+<p>For this introductory tutorial for Hadoop Developers we are going to focus on the basics, like:</p>
+
+<ul>
+<li>The core concepts of Apache Hadoop</li>
+<li>Writing a MapReduce program</li>
+</ul>
+
+<p>We have many <a href="http://hortonworks.com/tutorials">tutorials</a> which you can use with the Hortonworks Sandbox to learn about a rich and diverse set of components of the Hadoop platform.</p>
+
+<h3 id="core-of-apache-hadoop:0a3b4c8f5f9052cb439b35757c54a7bb">Core of Apache Hadoop</h3>
+
+<ul>
+<li>The Hadoop Distributed File System (HDFS)</li>
+<li>MapReduce</li>
+</ul>
+
+<p>A set of machines running HDFS and MapReduce is known as a Hadoop Cluster. Individual machines are known as nodes. A cluster can have as few as one node to as many as several thousands. For most application scenarios Hadoop is linearly scalable, which means you can expect better performance by simply adding more nodes.</p>
+
+<h3 id="mapreduce:0a3b4c8f5f9052cb439b35757c54a7bb">MapReduce</h3>
+
+<p>MapReduce is a method for distributing a task across multiple nodes. Each node processes data stored on that node to the extent possible.</p>
+
+<p>A running Map Reduce job consists of various phases such as <code>Map -&gt; Sort -&gt; Shuffle -&gt; Reduce</code></p>
+
+<p>The primary advantages of abstracting your jobs as MapReduce running over a distributed infrastructure like CPU and Storage are:</p>
+
+<ul>
+<li>Automatic parallelization and distribution of data in blocks across a distributed, scale-out infrastructure.</li>
+<li>Fault-tolerance against failure of storage, compute and network infrastructure</li>
+<li>Deployment, monitoring and security capability</li>
+<li>A clean abstraction for programmers</li>
+</ul>
+
+<p>Most MapReduce programs are written in Java. It can also be written in any scripting language using the Streaming API of Hadoop. MapReduce abstracts all the low level plumbing away from the developer such that developers can concentrate on writing the Map and Reduce functions.</p>
+
+<h4 id="the-mapreduce-concepts-and-terminology:0a3b4c8f5f9052cb439b35757c54a7bb">The MapReduce Concepts and Terminology</h4>
+
+<p>MapReduce jobs are controlled by a software daemon known as the <code>JobTracker</code>. The JobTracker resides on a &lsquo;master node&rsquo;. Clients submit MapReduce jobs to the JobTracker. The JobTracker assigns Map and Reduce tasks to other nodes on the cluster.</p>
+
+<p>These nodes each run a software daemon known as the <code>TaskTracker</code>. The TaskTracker is responsible for actually instantiating the Map or Reduce task, and reporting progress back to the JobTracker</p>
+
+<p>A <code>job</code> is a program with the ability of complete execution of Mappers and Reducers over a dataset. A <code>task</code> is the execution of a single Mapper or Reducer over a slice of data.</p>
+
+<p>There will be at least as many task attempts as there are tasks. If a task attempt fails, another will be started by the JobTracker. Speculative execution can also result in more task attempts than completed tasks.</p>
+
+<h4 id="mapreduce-the-mapper:0a3b4c8f5f9052cb439b35757c54a7bb">MapReduce: The Mapper</h4>
+
+<p>Hadoop attempts to ensure that Mappers run on nodes which hold their portion of the data locally, to minimize network traffic. Multiple Mappers run in parallel, each processing a portion of the input data.</p>
+
+<p>The Mapper reads data in the form of key/value pairs. It outputs zero or more key/value pairs</p>
+
+<pre><code>map(in_key, in_value) -&gt; (inter_key, inter_value) list
+</code></pre>
+
+<p>The Mapper may use or completely ignore the input key. For example, a standard pattern is to read a line of a file at a time. The key is the byte offset into the file at which the line starts. The value is the contents of the line itself. Typically the key is considered irrelevant. If the Mapper writes anything out, the output must be in the form of key/value pairs.</p>
+
+<h4 id="mapreduce-the-reducer:0a3b4c8f5f9052cb439b35757c54a7bb">MapReduce: The Reducer</h4>
+
+<p>After the Map phase is over, all the intermediate values for a given intermediate key are combined together into a list. This list is given to a Reducer. There may be a single Reducer, or multiple Reducers, this is specified as part of the job configuration. All values associated with a particular intermediate key are guaranteed to go to the same Reducer.</p>
+
+<p>The intermediate keys, and their value lists, are passed to the Reducer in sorted key order. This step is known as the &lsquo;shuffle and sort&rsquo;. The Reducer outputs zero or more final key/value pairs. These are written to HDFS. In practice, the Reducer usually emits a single key/value pair for each input key.</p>
+
+<p>It is possible for some Map tasks to take more time to complete than the others, often due to faulty hardware, or underpowered machines. This might cause a bottleneck as all mappers need to finish before any reducers can kick-off. Hadoop uses speculative execution to mitigate against such situations. If a Mapper appears to be running sluggishly than the others, a new instance of the Mapper will be started on another machine, operating on the same data. The results of the first Mapper to finish will be used. Hadoop will kill off the Mapper which is still running.</p>
+
+<h3 id="writing-a-mapreduce-program:0a3b4c8f5f9052cb439b35757c54a7bb">Writing a MapReduce Program</h3>
+
+<p>In this section you will learn how to use the Hadoop API to write a MapReduce program in Java</p>
+
+<p>Each of the portions (RecordReader, Mapper, Partitioner, Reducer, etc.) can be created by the developer. The developer is expected to atleast write the Mapper, Reducer, and driver code.</p>
+
+<h4 id="the-mapreduce-example:0a3b4c8f5f9052cb439b35757c54a7bb">The MapReduce Example</h4>
+
+<p><strong>WordCount</strong> example reads text files and counts how often words occur. The input is text files and the output is text files, each line of which contains a word and the count of how often it occured, separated by a tab.</p>
+
+<p>Each mapper takes a line as input and breaks it into words. It then emits a key/value pair of the word and 1. Each reducer sums the counts for each word and emits a single key/value with the word and sum.</p>
+
+<p>As an optimization, the reducer is also used as a combiner on the map outputs. This reduces the amount of data sent across the network by combining each word into a single record.</p>
+
+<p>To run the example, the command syntax is</p>
+
+<pre><code>hadoop jar hadoop-*-examples.jar wordcount [-m &lt;#maps&gt;] [-r &lt;#reducers&gt;] &lt;in-dir&gt; &lt;out-dir&gt;
+</code></pre>
+
+<p>All of the files in the input directory are read and the counts of words in the input are written to the output directory. It is assumed that both inputs and outputs are stored in HDFS. If your input is not already in HDFS, but is rather in a local file system somewhere, you need to copy the data into HDFS using a command like this:</p>
+
+<pre><code>hadoop dfs -copyFromLocal &lt;local-dir&gt; &lt;hdfs-dir&gt;
+</code></pre>
+
+<p>Below is the standard wordcount example implemented in Java:</p>
+
+<pre><code>    package org.myorg;
+
+    import java.io.IOException;
+    import java.util.*;
+
+    import org.apache.hadoop.fs.Path;
+    import org.apache.hadoop.conf.*;
+    import org.apache.hadoop.io.*;
+    import org.apache.hadoop.mapreduce.*;
+    import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+    import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+    import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+    import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+
+    public class WordCount {
+
+     public static class Map extends Mapper&lt;LongWritable, Text, Text, IntWritable&gt; {
+        private final static IntWritable one = new IntWritable(1);
+        private Text word = new Text();
+
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+            String line = value.toString();
+            StringTokenizer tokenizer = new StringTokenizer(line);
+            while (tokenizer.hasMoreTokens()) {
+                word.set(tokenizer.nextToken());
+                context.write(word, one);
+            }
+        }
+     } 
+
+     public static class Reduce extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {
+
+        public void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) 
+          throws IOException, InterruptedException {
+            int sum = 0;
+            for (IntWritable val : values) {
+                sum += val.get();
+            }
+            context.write(key, new IntWritable(sum));
+        }
+     }
+
+     public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+
+            Job job = new Job(conf, &quot;wordcount&quot;);
+
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
+
+        job.setMapperClass(Map.class);
+        job.setReducerClass(Reduce.class);
+
+        job.setInputFormatClass(TextInputFormat.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
+
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        job.waitForCompletion(true);
+     }
+
+    }
+</code></pre>
+
+<p>Every MapReduce job consists of three portions</p>
+
+<ul>
+<li>The driver code</li>
+<li>Code that runs on the client to configure and submit the job</li>
+<li>The Mapper</li>
+<li>The Reducer</li>
+</ul>
+
+<p>Before we look at the code, we need to cover some basic Hadoop API concepts</p>
+
+<h4 id="mapper-reading-data-from-hdfs:0a3b4c8f5f9052cb439b35757c54a7bb">Mapper reading data from HDFS</h4>
+
+<p>The data passed to the Mapper is specified by an InputFormat. The InputFormat is specified in the driver code. It defines the location of the input data like a file or directory on HDFS. It also determines how to split the input data into input splits.</p>
+
+<p>Each Mapper deals with a single input split. InputFormat is a factory for RecordReader objects to extract (key, value) records from the input source.</p>
+
+<p>FilelnputFormat is the base class used for all file-based InputFormats. TextlnputFormat is the default FilelnputFormat. It treats each \n-terminated line of a file as a value. The Key is the byte offset within the file of that line. KeyValueTextlnputFormat maps \n-terminated lines as &lsquo;key SEP value&rsquo;. By default, separator is a tab. SequenceFilelnputFormat is a binary file of (key, value) pairs with some additional metadata. SequenceFileAsTextlnputFormat is similar, but maps (key.toString( ), value.toString( )).</p>
+
+<p>Keys and values in Hadoop are objects. Values are objects which implement the writable interface. Keys are objects which implement writableComparable.</p>
+
+<h4 id="writable:0a3b4c8f5f9052cb439b35757c54a7bb">Writable</h4>
+
+<p>Hadoop defines its own &lsquo;box classes&rsquo; for strings, integers and so on:</p>
+
+<ul>
+<li>IntWritable for ints</li>
+<li>LongWritable for longs</li>
+<li>FloatWritable for floats</li>
+<li>DoubleWritable for doubles</li>
+<li>Text for strings</li>
+<li>Etc.</li>
+</ul>
+
+<p>The writable interface makes serialization quick and easy for Hadoop. Any value&rsquo;s type must implement the writable interface.</p>
+
+<h4 id="writablecomparable:0a3b4c8f5f9052cb439b35757c54a7bb">WritableComparable</h4>
+
+<p>A WritableComparable is a Writable which is also Comparable. Two writableComparables can be compared against each other to determine their &lsquo;order&rsquo;. Keys must be WritableComparables because they are passed to the Reducer in sorted order.</p>
+
+<p>Note that despite their names, all Hadoop box classes implement both Writable and WritableComparable, for example, intwritable is actually a WritableComparable</p>
+
+<h4 id="driver:0a3b4c8f5f9052cb439b35757c54a7bb">Driver</h4>
+
+<p>The driver code runs on the client machine. It configures the job, then submits it to the cluster.</p>
+
+<h3 id="streaming-api:0a3b4c8f5f9052cb439b35757c54a7bb">Streaming API</h3>
+
+<p>Many organizations have developers skilled in languages other than Java, such as</p>
+
+<ul>
+<li>C#</li>
+<li>Ruby</li>
+<li>Python</li>
+<li>Perl</li>
+</ul>
+
+<p>The Streaming API allows developers to use any language they wish to write Mappers and Reducers as long as the language can read from standard input and write to standard output.</p>
+
+<p>The advantages of the Streaming API are that there is no need for non-Java coders to learn Java. So it results in faster development time and the ability to use existing code libraries.</p>
+
+<h4 id="how-streaming-works:0a3b4c8f5f9052cb439b35757c54a7bb">How Streaming Works</h4>
+
+<p>To implement streaming, write separate Mapper and Reducer programs in the language of your choice. They will receive input via stdin. They should write their output to stdout.</p>
+
+<p>If TextinputFormat (the default) is used, the streaming Mapper just receives each line from the file on stdin where no key is passed. Streaming Mapper and streaming Reducer&rsquo;s output should be sent to stdout as key (tab) value (newline) and the Separators other than tab can be specified.</p>
+
+<p>In Java, all the values associated with a key are passed to the Reducer as an iterator. Using Hadoop Streaming, the Reducer receives its input as (key, value) pairs, one per line of standard input.</p>
+
+<p>Your code will have to keep track of the key so that it can detect when values from a new key start appearing launching a Streaming Job .To launch a Streaming job, use e.g.,:</p>
+
+<pre><code>hadoop jar $HADOOP_HOME/contrib/streaming/hadoop-streaming*.jar \
+-input mylnputDirs \ -output myOutputDir \
+-mapper myMap.py \
+-reducer myReduce.py \ -file myMap.py \ -file myReduce.py
+</code></pre>
+
+<h3 id="hive-and-pig-motivation:0a3b4c8f5f9052cb439b35757c54a7bb">Hive and Pig: Motivation</h3>
+
+<p>MapReduce code is typically written in Java. Although it can be written in other languages using Hadoop</p>
+
+<p>Streaming Requires a programmer who understands how to think in terms of MapReduce, who understands the problem they&rsquo;re trying to solve and who has enough time to write and test the code.</p>
+
+<p>Many organizations have only a few developers who can write good MapReduce code</p>
+
+<p>Meanwhile, many other people want to analyze data</p>
+
+<ul>
+<li>Data analysts</li>
+<li>Business analysts</li>
+<li>Data scientists</li>
+<li>Statisticians</li>
+</ul>
+
+<p>So we needed a higher-level abstraction on top of MapReduce providing the ability to query the data without needing to know MapReduce intimately. Hive and Pig address these needs.</p>
+
+<p>See the following tutorial for more on Hive and Pig:</p>
+
+<ul>
+<li><a href="http://hortonworks.com/hadoop-tutorial/how-to-process-data-with-apache-hive/">Process Data with Apache Hive</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/how-to-process-data-with-apache-pig/">Process Data with Apache Pig</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/cascading-log-parsing/">Get Started with Cascading on Hortonworks Data Platform</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/supercharging-interactive-queries-hive-tez/">Interactive Query for Hadoop with Apache Hive on Apache Tez</a></li>
+<li><a href="http://hortonworks.com/hadoop-tutorial/exploring-data-apache-pig-grunt-shell/">Exploring Data with Apache Pig from the Grunt shell</a></li>
+</ul>
+
+	    </div>
+	    
+	<div class="about">
+	<p> 
+     
+    </p>
+</div>
+		<nav id="pagination">
+			<a class="prev" href="http://saptak.github.io/posts/Ingesting%20and%20processing%20Real-time%20events%20with%20Apache%20Storm/">Prev</a>
+			<a class="next" href="http://saptak.github.io/posts/How%20To%20Process%20Data%20with%20Apache%20Pig/">Next</a>
+		</nav>
+	
+		        <footer>
+		        	Powered by <a href="https://github.com/saptak">GitHub</a> 
+		        	<p>© Saptak Sen 2015</p>
+		        </footer>
+		    </div>
+		  </div>    
+		</div>
+      </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + ":change-me";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 4]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="http://change-me" style="border:0;" alt="" /></p></noscript>
+
+
+</html>
