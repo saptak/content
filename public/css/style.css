@@ -138,6 +138,12 @@ footer {
   margin: 25px 0;
 }
 
+.post h3 {
+  font-size: 22px;
+  line-height: 40px;
+  margin: 25px 0;
+}
+
 p {
   line-height: 25px;
   margin: 0 0 20px;
