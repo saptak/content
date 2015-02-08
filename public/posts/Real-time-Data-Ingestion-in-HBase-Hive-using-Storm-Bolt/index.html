@@ -1,0 +1,631 @@
+	
+	<!doctype html>
+<html lang="en">
+  <head>    
+    <title>@saptak - Real time Data Ingestion in HBase &amp; Hive using Storm Bolt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    
+    <link href="/css/milk.min.css" rel="stylesheet">
+    <link href="/css/milk-responsive.min.css" rel="stylesheet">     
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/css/fonts.css" rel="stylesheet" type="text/css" media="all">
+
+    <script src='https://cdn.firebase.com/js/client/2.0.4/firebase.js'></script>
+    <link rel="shortcut icon" href="/images/alexfinn.ico"> 
+    <link rel="apple-touch-icon" href="">
+    <link rel="canonical" href="http://saptak.github.io/posts/Real-time-Data-Ingestion-in-HBase-Hive-using-Storm-Bolt/">
+
+    
+    <link href="/rss.xml" type="application/atom+xml" rel="alternate" title="@saptak">    
+
+  </head>
+  <body>    
+    <div class="navbar navbar-fixed-top">        
+  <div id="navbar-inner">
+          <div id="logo">
+            <a href="http://saptak.in"><img src="/images/letter-a.png" width="100px"></img></a>
+          </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="content">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="posts">
+      
+
+	    
+	  <div class="post">
+	    <header class="post-header">
+	        <h1><a href="/posts/Real-time-Data-Ingestion-in-HBase-Hive-using-Storm-Bolt/">Real time Data Ingestion in HBase &amp; Hive using Storm Bolt</a></h1>
+	        <div class="post-time">February 6 2015</div>
+	    </header>
+	    <div class="post-after">
+	        <div class="tags">
+	            
+	        </div>
+	    </div>
+	    <hr>
+	    <div class="post content">
+	        
+
+<h2 id="overview:683d6eeaf4bd2c379e5d5e6856741786">Overview</h2>
+
+<p>In this tutorial, we will build a solution to ingest real time streaming data into HBase and HDFS.</p>
+
+<p>In previous tutorial we have explored generating and processing streaming data with <a href="http://hortonworks.com/hadoop-tutorial/simulating-transporting-realtime-events-stream-apache-kafka/">Apache Kafka</a>and <a href="http://hortonworks.com/hadoop-tutorial/ingesting-processing-real-time-events-apache-storm/">Apache Storm</a>. In this tutorial we will create HDFS Bolt &amp; HBase Bolt to read the streaming data from the Kafka Spout and persist in Hive &amp; HBase tables. </p>
+
+<h3 id="about-hbase:683d6eeaf4bd2c379e5d5e6856741786">About HBase</h3>
+
+<p>HBase provides near real-time, random read and write access to tables (or to be more accurate ‘maps’) storing billions of rows and millions of columns.</p>
+
+<p>In this case once we store this rapidly and continuously growing dataset from Internet of Things (IoT), we will be able to do super fast lookup for analytics irrespective of the data size.</p>
+
+<h3 id="about-storm:683d6eeaf4bd2c379e5d5e6856741786">About Storm</h3>
+
+<p>Apache Storm is an Open Source distributed, reliable, fault – tolerant system for real time processing of large volume of data. Spout and Bolt are the two main components in Storm, which work together to process streams of data.</p>
+
+<ul>
+<li>Spout: Works on the source of data streams. In the &ldquo;Truck Events&rdquo; use case, Spout will read data from Kafka topics.</li>
+<li>Bolt: Spout passes streams of data to Bolt which processes and passes it to either a data store or another Bolt.</li>
+</ul>
+
+<p>In this tutorial, you will learn the following topics:</p>
+
+<ul>
+<li>To configure Storm Bolt.</li>
+<li>Store Persisting data in HBase and Hive.</li>
+<li>Verify data in HDFS and HBase.</li>
+</ul>
+
+<h2 id="prerequisites:683d6eeaf4bd2c379e5d5e6856741786">Prerequisites</h2>
+
+<p><a href="http://hortonworks.com/hadoop-tutorial/simulating-transporting-realtime-events-stream-apache-kafka/">Tutorial #1</a> &amp; <a href="http://hortonworks.com/hadoop-tutorial/ingesting-processing-real-time-events-apache-storm/">Tutorial #2</a> should be completed successfully with a functional Storm and Kafka Bolt reading data from the Kafka Queue.</p>
+
+<h3 id="step-1:683d6eeaf4bd2c379e5d5e6856741786">Step 1:</h3>
+
+<p><strong>Smoke Test running Services.</strong></p>
+
+<ul>
+<li><strong>Check NameNode and DataNode Service.</strong></li>
+</ul>
+
+<p>The _‘jps’_ command will show all java process that are currently running as seen in the screenshot below.</p>
+
+<p>Verify that the _NameNode_ and the _DataNode_ processes are running.</p>
+
+<p><code>
+[root@sandbox ~]# jps  
+</code></p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/jps.png" alt="jps" />
+</p>
+
+<ul>
+<li><strong>Check that HBase is running.</strong></li>
+</ul>
+
+<p>If <strong>HMaster</strong> and <strong>HRegionServer</strong> are missing in the ‘jps’ command output list, as seen above, we need to restart the HBase services from Ambari.</p>
+
+<p>‘jps’ command output list should now show that the <strong>HMaster</strong> and <strong>HRegionServer</strong> services are running.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/jps+hbase+running.png" alt="jps : verify hbase services running" />
+</p>
+
+<p>jps : verify hbase services running</p>
+
+<p>To smoke test HBase, we need to login to _HBase_ user account and start the HBase shell to verify the status of the services.</p>
+
+<pre><code>[root@sandbox ~]# su hbase  
+[hbase@sandbox root]$ hbase shell
+
+hbase(main):001:0&gt; status
+
+hbase(main):002:0&gt; exit
+
+[hbase@sandbox root]$ exit  
+[root@sandbox ~]# 
+</code></pre>
+
+<p>The output is as shown in the screenshot below.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/hbase+running.png" alt="hbase running" />
+</p>
+
+<p>hbase running</p>
+
+<ul>
+<li><strong>Smoke test that Hive is Running.</strong></li>
+</ul>
+
+<p>You can smoke test Hive by either using the command line or by browser.</p>
+
+<p>To smoke test using the command line, login as a Hive user with _su hive_ command and follow the instructions shown below:</p>
+
+<pre><code>[root@sandbox ~]# su hive  
+[hive@sandbox root]$ hive
+
+hive&gt; show databases;
+
+hive&gt; exit;  
+[hive@sandbox root]$ exit
+
+[root@sandbox ~]# 
+</code></pre>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/smoketest+hive.png" alt="smoketest hive" />
+</p>
+
+<p>smoketest hive</p>
+
+<p>To smoke test Hive by using a browser, open the url ‘<a href="http://localhost:8000/beeswax/’">http://localhost:8000/beeswax/’</a> from any browser on your local machine.</p>
+
+<p>Execute the query &ldquo;<strong>show databases;</strong>&rdquo; in the query editor window.</p>
+
+<p>Click on ‘Execute’ button to see an output as shown in the screenshot below.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/show+databases.png" alt="Query Editor" />
+</p>
+
+<p>Hive queries can be tested and saved using the Query Editor.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/default+databases.png" alt="default database" />
+</p>
+
+<p>default database</p>
+
+<h3 id="step-2:683d6eeaf4bd2c379e5d5e6856741786">Step 2:</h3>
+
+<p><strong>Persist data in HDFS &amp; HBase.</strong></p>
+
+<ul>
+<li><strong>Creating HBase tables</strong></li>
+</ul>
+
+<p>We work with have 2 Hbase tables in this tutorial.</p>
+
+<p>The first table stores all events generated and the second stores the ‘driverId’ and non-normal events count.</p>
+
+<p>As with Hive, we can execute HBase queries via a browser.</p>
+
+<p>Use the following url to open a HBase shell: <a href="http://localhost:8000/shell/create?keyName=hbase. ">http://localhost:8000/shell/create?keyName=hbase. </a></p>
+
+<pre><code>hbase(main):001:0&gt; create 'truck_events', 'events'  
+hbase(main):002:0&gt; create 'driver_dangerous_events', 'count'  
+hbase(main):003:0&gt; list  
+hbase(main):004:0&gt; 
+</code></pre>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/hbase+create+tables.png" alt="hbase create tables" />
+</p>
+
+<p>hbase create tables</p>
+
+<p>Next, we will create Hive tables.</p>
+
+<ul>
+<li><strong>Creating Hive tables</strong></li>
+</ul>
+
+<p>Open the URL <a href="http://localhost:8000/beeswax/">http://localhost:8000/beeswax/</a> in a browser and copy the below script into the query editor:</p>
+
+<pre><code>create table truck_events_text_partition  
+(driverId string,  
+ truckId string,  
+ eventTime timestamp,  
+ eventType string,  
+ longitude double,  
+ latitude double)  
+partitioned by (date string)  
+ROW FORMAT DELIMITED  
+FIELDS TERMINATED BY ',';
+</code></pre>
+
+<p>This script creates the Hive table to persist all events generated. This table is partitioned by date.</p>
+
+<p>The table created can be viewed at this URL: <a href="http://localhost:8000/beeswax/table/default/truck_events_text_partition">http://localhost:8000/beeswax/table/default/truck_events_text_partition</a></p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/Screen+Shot+2014-08-15+at+12.00.48+AM.png" alt="Hive table" />
+</p>
+
+<p>Hive table</p>
+
+<p>Verify that the table has been properly created by clicking Tables and selecting truck_events_text_partiiton.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/storm2/image22.png" alt="" />
+<br />
+<img src="http://hortonassets.s3.amazonaws.com/mda/tut3/truck_events_text_partition+table+created.png" alt="truck_events_text_partition" />
+<br />
+truck_events_text_partition</p>
+
+<ul>
+<li><strong>Creating ORC ‘truckevent’ Hive tables</strong></li>
+</ul>
+
+<p>The Optimized Row Columnar (ORC) file format provides a highly efficient way to store Hive data. It was designed to overcome limitations of the other Hive file formats. Using ORC files improves performance when Hive is reading, writing, and processing data.</p>
+
+<p>Syntax for ORC tables:</p>
+
+<p>CREATE TABLE … STORED AS ORC</p>
+
+<p>ALTER TABLE … [PARTITION partition_spec] SET FILEFORMAT ORC</p>
+
+<p><em>Note: This statement only works on partitioned tables. If you apply it to flat tables, it may cause query errors.</em></p>
+
+<p>SET hive.default.fileformat=Orc</p>
+
+<p>Let us create the ‘truckevent’ table as per the above syntax:</p>
+
+<p><code>
+create table truck_events_text_partition_orc  
+(driverId string,  
+truckId string,  
+eventTime timestamp,  
+eventType string,  
+longitude double,  
+latitude double)  
+partitioned by (date string)  
+ROW FORMAT DELIMITED  
+FIELDS TERMINATED BY ','  
+stored as orc tblproperties (&quot;orc.compress&quot;=&quot;NONE&quot;);  
+</code></p>
+
+<p>The data in ‘truck_events_text_partition_orc’ table can be stored with ZLIB, Snappy, LZO compression options. This can be set by changing <code>tblproperties (&quot;orc.compress&quot;=&quot;NONE&quot;)</code>option in the query above. </p>
+
+<h3 id="step-3:683d6eeaf4bd2c379e5d5e6856741786">Step 3:</h3>
+
+<p><strong>Updating Tutorials-master Project</strong></p>
+
+<ul>
+<li>Copy /etc/hbase/conf/hbase-site.xml to src/main/resources/ directory and recompile the Maven project.</li>
+</ul>
+
+<p>[root@sandbox ~]# cd /opt/TruckEvents/Tutorials-master/</p>
+
+<p>[root@sandbox Tutorials-master]# cp /etc/hbase/conf/hbase-site.xml src/main/resources/</p>
+
+<p>[root@sandbox Tutorials-master]# mvn clean package</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/mvn+clean+package.png" alt="update project" />
+</p>
+
+<p>In case, mvn is not in your path, you can use the command <code>export PATH=/usr/local/apache-maven-3.2.2/bin:$PATH</code> to include it in your path.</p>
+
+<ul>
+<li>Deactivate &amp; Kill the Storm topology using the Storm UI as shown in the screenshot below:<br /></li>
+</ul>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/storm+UI.png" alt="storm UI" />
+</p>
+
+<p>storm UI<img src="http://hortonassets.s3.amazonaws.com/mda/tut3/Deactivate+and+Kill.png" alt="deactivate and kill" />
+</p>
+
+<p>deactivate and kill<img src="http://hortonassets.s3.amazonaws.com/mda/tut3/deactivate.png" alt="Deactivate" />
+</p>
+
+<p>Deactivate<img src="http://hortonassets.s3.amazonaws.com/mda/tut3/kill.png" alt="kill" />
+</p>
+
+<p>kill</p>
+
+<ul>
+<li><strong>Loading new Storm topology.</strong></li>
+</ul>
+
+<p>Execute the Storm ‘jar’ command to create a new Topology from <strong>Tutorial# 3</strong> after the code has been compiled.</p>
+
+<pre><code>[root@sandbox Tutorials-master]# storm jar target/Tutorial-1.0-SNAPSHOT.jar com.hortonworks.tutorials.tutorial3.TruckEventProcessingTopology
+</code></pre>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/Topology+Summary.png" alt="Topology Summary" />
+</p>
+
+<p>Topology Summary</p>
+
+<h3 id="step-4:683d6eeaf4bd2c379e5d5e6856741786">Step 4:</h3>
+
+<p><strong>Verify Data in HDFS and HBase.</strong></p>
+
+<ul>
+<li>Start the <strong>‘TruckEventsProducer’</strong> Kafka Producer and verify that the data has been persisted by using the Storm Topology view.</li>
+</ul>
+
+<p>[root@sandbox Tutorials-master]# java -cp target/Tutorial-1.0-SNAPSHOT.jar com.hortonworks.tutorials.tutorial1.TruckEventsProducer localhost:9092 localhost:2181</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/Verify+data+in+Storm+UI.png" alt="Verify Storm UI" />
+</p>
+
+<p>Verify Storm UI</p>
+
+<ul>
+<li>Verify that the data is in HBase by executing the following commands in HBase shell:</li>
+</ul>
+
+<p>hbase(main):001:0&gt; list</p>
+
+<p>hbase(main):002:0&gt; count ‘truck_events’</p>
+
+<p>366 row(s) in 0.3900 seconds</p>
+
+<p>=&gt; 366</p>
+
+<p>hbase(main):003:0&gt; count ‘driver_dangerous_events’</p>
+
+<p>3 row(s) in 0.0130 seconds</p>
+
+<p>=&gt; 3</p>
+
+<p>hbase(main):004:0&gt; exit</p>
+
+<p>The ‘driver_dangerous_events’ table is updated upon every violation.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/Verify+data+in+HBase.png" alt="Verify data in HBase" />
+</p>
+
+<p>Verify data in HBase</p>
+
+<ul>
+<li>Verify that the data is in HDFS by browsing to this URL: <a href="http://localhost:8000/filebrowser/view/truck-events-v4/staging">http://localhost:8000/filebrowser/view/truck-events-v4/staging</a><br /></li>
+</ul>
+
+<p>We should see the files been injested in HDFS now.</p>
+
+<p>With the default settings for HDFS, users might see the data written to HDFS once in every 5 minutes.</p>
+
+<p><img src="http://hortonassets.s3.amazonaws.com/mda/tut3/Verify+Data+in+HDFS.png" alt="Verify data in HDFS" />
+</p>
+
+<p>Verify data in HDFS</p>
+
+<p>This completes the tutorial #3. </p>
+
+<p>In the next tutorial we will integrate with a UI and visualize the events in real time. </p>
+
+<h3 id="code-description:683d6eeaf4bd2c379e5d5e6856741786">Code Description</h3>
+
+<p>1.<strong>BaseTruckEventTopology.java</strong></p>
+
+<pre><code>topologyConfig.load(ClassLoader.getSystemResourceAsStream(configFileLocation));
+</code></pre>
+
+<p>This is the base class, where the topology configuration is initialized from the /resource/truck_event_topology.properties files.</p>
+
+<p>2.<strong>FileTimeRotationPolicy.java</strong></p>
+
+<p>This implements the file rotation policy after a certain duration.</p>
+
+<p>“`</p>
+
+<p>public FileTimeRotationPolicy(float count, Units units) {</p>
+
+<p>this.maxMilliSeconds = (long) (count * units.getMilliSeconds());</p>
+
+<p>}</p>
+
+<pre><code>@Override  
+public boolean mark(Tuple tuple, long offset) {  
+    // The offsett is not used here as we are rotating based on time  
+    long diff = (new Date()).getTime() - this.lastCheckpoint;  
+    return diff &gt;= this.maxMilliSeconds;  
+}
+</code></pre>
+
+<p>3.<strong>LogTruckEventsBolt.java</strong></p>
+
+<p>LogTruckEvent Spout logs the Kafka messages received from the Kafka Spout to the log files under /var/log/storm/worker-*.log</p>
+
+<pre><code>public void execute(Tuple tuple)  
+ {
+ LOG.info(tuple.getStringByField(TruckScheme.FIELD_DRIVER_ID) + &quot;,&quot; +  
+ tuple.getStringByField(TruckScheme.FIELD_TRUCK_ID) + &quot;,&quot; +  
+ tuple.getValueByField(TruckScheme.FIELD_EVENT_TIME) + &quot;,&quot; +  
+ tuple.getStringByField(TruckScheme.FIELD_EVENT_TYPE) + &quot;,&quot; +  
+ tuple.getStringByField(TruckScheme.FIELD_LATITUDE) + &quot;,&quot; +  
+ tuple.getStringByField(TruckScheme.FIELD_LONGITUDE));  
+ }
+</code></pre>
+
+<p>4.<strong>TruckScheme.java</strong></p>
+
+<p>This is the deserializer provided to the Kafka Spout to deserialize Kafka’s byte message streams to Values objects.</p>
+
+<pre><code>public List&lt;Object&gt; deserialize(byte[] bytes)  
+        {
+        try  
+                {
+            String truckEvent = new String(bytes, &quot;UTF-8&quot;);  
+            String[] pieces = truckEvent.split(&quot;\\|&quot;);
+
+            Timestamp eventTime = Timestamp.valueOf(pieces[0]);  
+            String truckId = pieces[1];  
+            String driverId = pieces[2];  
+            String eventType = pieces[3];  
+            String longitude= pieces[4];  
+            String latitude  = pieces[5];  
+            return new Values(cleanup(driverId), cleanup(truckId),  
+                                    eventTime, cleanup(eventType), cleanup(longitude), cleanup(latitude));
+
+        }  
+                catch (UnsupportedEncodingException e)  
+                {
+                    LOG.error(e);  
+                    throw new RuntimeException(e);  
+        }
+
+    }
+</code></pre>
+
+<p>5.<strong>HiveTablePartitionAction.java</strong></p>
+
+<p>This creates Hive partitions based on timestamp and loads the data by executing the Hive DDL statements.</p>
+
+<pre><code>public void loadData(String path, String datePartitionName, String hourPartitionName )  
+    {
+
+        String partitionValue = datePartitionName + &quot;-&quot; + hourPartitionName;
+
+        LOG.info(&quot;About to add file[&quot;+ path + &quot;] to a partitions[&quot;+partitionValue + &quot;]&quot;);
+
+        StringBuilder ddl = new StringBuilder();  
+        ddl.append(&quot; load data inpath &quot;)  
+            .append(&quot; '&quot;).append(path).append(&quot;' &quot;)  
+            .append(&quot; into table &quot;)  
+            .append(tableName)  
+            .append(&quot; partition &quot;).append(&quot; (date='&quot;).append(partitionValue).append(&quot;')&quot;);
+
+        startSessionState(sourceMetastoreUrl);
+</code></pre>
+
+<p>The data is stored in the partitioned ORC tables using the following method.</p>
+
+<pre><code>String ddlORC = &quot;INSERT OVERWRITE TABLE &quot; + tableName + &quot;_orc SELECT * FROM &quot; +tableName;
+
+
+
+
+    try {  
+        execHiveDDL(&quot;use &quot; + databaseName);  
+        execHiveDDL(ddl.toString());  
+        execHiveDDL(ddlORC.toString());  
+    } catch (Exception e) {  
+        String errorMessage = &quot;Error exexcuting query[&quot;+ddl.toString() + &quot;]&quot;;  
+        LOG.error(errorMessage, e);  
+        throw new RuntimeException(errorMessage, e);  
+    }
+} 
+</code></pre>
+
+<p>6.<strong>TruckEventProcessingTopology.java</strong></p>
+
+<p>This creates a connection to HBase tables and access data within the prepare() function.</p>
+
+<pre><code>public void prepare(Map stormConf, TopologyContext context,  
+ OutputCollector collector)  
+ {
+ ...  
+ this.connection = HConnectionManager.createConnection(constructConfiguration());  
+ this.eventsCountTable = connection.getTable(EVENTS_COUNT_TABLE_NAME);  
+
+ this.eventsTable = connection.getTable(EVENTS_TABLE_NAME);  
+ } 
+
+
+
+...  
+}
+
+
+
+Data to be stored is prepared in the constructRow() function using put.add().
+
+
+
+private Put constructRow(String columnFamily, String driverId, String truckId,  
+ Timestamp eventTime, String eventType, String latitude, String longitude)  
+ {
+
+    String rowKey = consructKey(driverId, truckId, eventTime);  
+    ...  
+    put.add(CF_EVENTS_TABLE, COL_DRIVER_ID, Bytes.toBytes(driverId));  
+    put.add(CF_EVENTS_TABLE, COL_TRUCK_ID, Bytes.toBytes(truckId));
+
+    ...  
+}
+</code></pre>
+
+<p>This executes the getInfractionCountForDriver() to get the count of events for a driver using driverID and stores the data in HBase with constructRow() function.</p>
+
+<pre><code>public void execute(Tuple tuple)  
+ {
+
+    ...  
+    long incidentTotalCount = getInfractionCountForDriver(driverId);
+
+    ...
+
+        Put put = constructRow(EVENTS_TABLE_NAME, driverId, truckId, eventTime, eventType,  
+                            latitude, longitude);  
+        this.eventsTable.put(put);
+
+    ...  
+            incidentTotalCount = this.eventsCountTable.incrementColumnValue(Bytes.toBytes(driverId), CF_EVENTS_COUNT_TABLE,  
+                                                                                           ...  
+}
+</code></pre>
+
+<p>7.<strong>TruckEventProcessingTopology.java</strong></p>
+
+<p>HDFS and HBase Bolt configurations created within configureHDFSBolt() and configureHBaseBolt() respectively. </p>
+
+<pre><code>public void configureHDFSBolt(TopologyBuilder builder)  
+{
+
+    HdfsBolt hdfsBolt = new HdfsBolt()  
+                     .withFsUrl(fsUrl)  
+             .withFileNameFormat(fileNameFormat)  
+             .withRecordFormat(format)  
+             .withRotationPolicy(rotationPolicy)  
+             .withSyncPolicy(syncPolicy)  
+             .addRotationAction(hivePartitionAction);
+
+}  
+public void configureHBaseBolt(TopologyBuilder builder)  
+{
+    TruckHBaseBolt hbaseBolt = new TruckHBaseBolt(topologyConfig);  
+    builder.setBolt(HBASE_BOLT_ID, hbaseBolt, 2).shuffleGrouping(KAFKA_SPOUT_ID);  
+}
+</code></pre>
+
+	    </div>
+	    
+	<div class="about">
+	<p> 
+     
+    </p>
+</div>
+		<nav id="pagination">
+			<a class="prev" href="http://saptak.github.io/about/">Prev</a>
+			<a class="next" href="http://saptak.github.io/posts/Ingesting-and-processing-Real-time-events-with-Apache-Storm/">Next</a>
+		</nav>
+	
+		        <footer>
+		        	Powered by <a href="https://github.com/saptak">GitHub</a> 
+		        	<p>© Saptak Sen 2015</p>
+		        </footer>
+		    </div>
+		  </div>    
+		</div>
+      </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + ":change-me";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 4]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59342910-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<noscript><p><img src="http://change-me" style="border:0;" alt="" /></p></noscript>
+
+
+</html>
