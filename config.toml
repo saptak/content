@@ -1,14 +1,14 @@
 languageCode = "en-us"
-title = "saptak.github.io"
+title = "saptak.in"
 canonifyurls = false
-baseurl = "http://saptak.github.io"
+baseurl = "http://saptak.in"
 
 [taxonomies]
   category = "categories"
   tag = "tags"
 
 [params]
-  	Description = "saptak.github.io"
+  	Description = "saptak.in"
   	author = "Saptak Sen"
 	twitter = "saptak"
 	github = "saptak"

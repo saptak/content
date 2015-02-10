@@ -1,0 +1,152 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', '-g', 'install', 'jump' ]
+2 info using npm@2.1.18
+3 info using node@v0.10.29
+4 silly cache add args [ 'jump', null ]
+5 verbose cache add spec jump
+6 silly cache add parsed spec { raw: 'jump',
+6 silly cache add   scope: null,
+6 silly cache add   name: 'jump',
+6 silly cache add   rawSpec: '',
+6 silly cache add   spec: '*',
+6 silly cache add   type: 'range' }
+7 verbose addNamed jump@*
+8 silly addNamed semver.valid null
+9 silly addNamed semver.validRange *
+10 silly addNameRange { name: 'jump', range: '*', hasData: false }
+11 silly mapToRegistry name jump
+12 silly mapToRegistry using default registry
+13 silly mapToRegistry registry https://registry.npmjs.org/
+14 silly mapToRegistry uri https://registry.npmjs.org/jump
+15 verbose addNameRange registry:https://registry.npmjs.org/jump not in flight; fetching
+16 verbose request uri https://registry.npmjs.org/jump
+17 verbose request no auth needed
+18 info attempt registry request try #1 at 23:40:01
+19 verbose request id 8281bccbaad05b4c
+20 http request GET https://registry.npmjs.org/jump
+21 http 200 https://registry.npmjs.org/jump
+22 silly get cb [ 200,
+22 silly get   { date: 'Mon, 09 Feb 2015 07:40:02 GMT',
+22 silly get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+22 silly get     etag: '"AVZUNY7SKSD4EPZLKRB55R0S1"',
+22 silly get     'content-type': 'application/json',
+22 silly get     'cache-control': 'max-age=60',
+22 silly get     'content-length': '13444',
+22 silly get     'accept-ranges': 'bytes',
+22 silly get     via: '1.1 varnish',
+22 silly get     age: '0',
+22 silly get     'x-served-by': 'cache-lax1433-LAX',
+22 silly get     'x-cache': 'MISS',
+22 silly get     'x-cache-hits': '0',
+22 silly get     'x-timer': 'S1423467602.149668,VS0,VE142',
+22 silly get     vary: 'Accept',
+22 silly get     'keep-alive': 'timeout=10, max=50',
+22 silly get     connection: 'Keep-Alive' } ]
+23 silly addNameRange number 2 { name: 'jump', range: '*', hasData: true }
+24 silly addNameRange versions [ 'jump',
+24 silly addNameRange   [ '0.0.1',
+24 silly addNameRange     '0.0.2',
+24 silly addNameRange     '0.0.3',
+24 silly addNameRange     '0.0.4',
+24 silly addNameRange     '0.0.5',
+24 silly addNameRange     '0.0.6',
+24 silly addNameRange     '0.0.7',
+24 silly addNameRange     '0.0.8',
+24 silly addNameRange     '0.1.0',
+24 silly addNameRange     '0.1.1' ] ]
+25 verbose addNamed jump@0.1.1
+26 silly addNamed semver.valid 0.1.1
+27 silly addNamed semver.validRange 0.1.1
+28 silly mapToRegistry name jump
+29 silly mapToRegistry using default registry
+30 silly mapToRegistry registry https://registry.npmjs.org/
+31 silly mapToRegistry uri https://registry.npmjs.org/jump
+32 verbose addRemoteTarball https://registry.npmjs.org/jump/-/jump-0.1.1.tgz not in flight; adding
+33 verbose addRemoteTarball [ 'https://registry.npmjs.org/jump/-/jump-0.1.1.tgz',
+33 verbose addRemoteTarball   '81fb1b51664696d8625fb6e3b87991408dc6c614' ]
+34 info retry fetch attempt 1 at 23:40:02
+35 info attempt registry request try #1 at 23:40:02
+36 http fetch GET https://registry.npmjs.org/jump/-/jump-0.1.1.tgz
+37 http fetch 200 https://registry.npmjs.org/jump/-/jump-0.1.1.tgz
+38 silly fetchAndShaCheck shasum 81fb1b51664696d8625fb6e3b87991408dc6c614
+39 verbose addTmpTarball /var/folders/bd/mt7ll_9117gdvp9z3mqy1dlh0000gn/T/npm-1206-70a9068f/registry.npmjs.org/jump/-/jump-0.1.1.tgz not in flight; adding
+40 verbose addTmpTarball already have metadata; skipping unpack for jump@0.1.1
+41 silly cache afterAdd jump@0.1.1
+42 verbose afterAdd /Users/saptak/.npm/jump/0.1.1/package/package.json not in flight; writing
+43 verbose afterAdd /Users/saptak/.npm/jump/0.1.1/package/package.json written
+44 silly install resolved [ { author:
+44 silly install resolved      { name: 'Adrien Friggeri',
+44 silly install resolved        email: 'adrien@friggeri.net',
+44 silly install resolved        url: 'http://friggeri.net' },
+44 silly install resolved     name: 'jump',
+44 silly install resolved     description: 'autosuggest change directory',
+44 silly install resolved     version: '0.1.1',
+44 silly install resolved     repository: { url: 'git://github.com/afriggeri/jump.git' },
+44 silly install resolved     directories: { lib: '.' },
+44 silly install resolved     engines: { node: '*' },
+44 silly install resolved     dependencies:
+44 silly install resolved      { charm: 'https://github.com/afriggeri/node-charm/tarball/master',
+44 silly install resolved        commander: 'https://github.com/afriggeri/commander.js/tarball/master' },
+44 silly install resolved     devDependencies: {},
+44 silly install resolved     bin: { jump: './jump.js' },
+44 silly install resolved     preferGlobal: true,
+44 silly install resolved     _npmUser: { name: 'afriggeri', email: 'adrien@friggeri.net' },
+44 silly install resolved     _id: 'jump@0.1.1',
+44 silly install resolved     optionalDependencies: {},
+44 silly install resolved     _engineSupported: true,
+44 silly install resolved     _npmVersion: '1.1.21',
+44 silly install resolved     _nodeVersion: 'v0.8.0',
+44 silly install resolved     _defaultsLoaded: true,
+44 silly install resolved     dist:
+44 silly install resolved      { shasum: '81fb1b51664696d8625fb6e3b87991408dc6c614',
+44 silly install resolved        tarball: 'http://registry.npmjs.org/jump/-/jump-0.1.1.tgz' },
+44 silly install resolved     readme: '#Installation\n\n    npm -g install jump\n    jump >> ~/.bash_profile  # or ~/.zshrc\n    source ~/.bash_profile\n\n#Usage\n\nPretty simple, `jump` is aliased to `j` :\n\n    j\n\nType a few letters, `jump` autosuggests 5 results, move with arrows, return to select.\n\n`jump` also supports a few options:\n\n    jump [options]\n\n      Options:\n\n        -h, --help       output usage information\n        -v, --version    output the version number\n        -n --number <n>  number of suggestions\n        -a --auto        automatically change directory if only one suggestion\n    \n\n`jump` uses spotlight (`mdfind`) behind the scenes, probably won\'t work on anything but osx.\n\n#Service\n\nA service is included so that it is possible to bind a keyboard shortcut to starting jump (e.g. `^T`).\n\n#TODO\n\nSort by usage would be nice.\n\n#License\nCopyright (C) 2011 by Adrien Friggeri\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.',
+44 silly install resolved     maintainers: [ [Object] ],
+44 silly install resolved     _shasum: '81fb1b51664696d8625fb6e3b87991408dc6c614',
+44 silly install resolved     _resolved: 'https://registry.npmjs.org/jump/-/jump-0.1.1.tgz',
+44 silly install resolved     _from: 'jump@*' } ]
+45 info install jump@0.1.1 into /usr/local/lib
+46 info installOne jump@0.1.1
+47 verbose installOne of jump to /usr/local/lib not in flight; installing
+48 verbose lock using /Users/saptak/.npm/_locks/jump-53fcd55e6c768019.lock for /usr/local/lib/node_modules/jump
+49 silly install write writing jump 0.1.1 to /usr/local/lib/node_modules/jump
+50 silly cache addNamed cb jump@0.1.1
+51 verbose unbuild lib/node_modules/jump
+52 verbose gentlyRm vacuuming /usr/local/lib/node_modules/jump
+53 verbose tar unpack /Users/saptak/.npm/jump/0.1.1/package.tgz
+54 verbose tar unpacking to /usr/local/lib/node_modules/jump
+55 verbose gentlyRm vacuuming /usr/local/lib/node_modules/jump
+56 silly gunzTarPerm modes [ '755', '644' ]
+57 error tar.unpack untar error /Users/saptak/.npm/jump/0.1.1/package.tgz
+58 verbose unlock done using /Users/saptak/.npm/_locks/jump-53fcd55e6c768019.lock for /usr/local/lib/node_modules/jump
+59 verbose fstream_path /usr/local/lib/node_modules/jump
+60 verbose fstream_type Directory
+61 verbose fstream_class DirWriter
+62 verbose stack Error: EACCES, mkdir '/usr/local/lib/node_modules/jump'
+63 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+63 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+63 verbose fstream_stack Object.oncomplete (fs.js:107:15)
+64 verbose cwd /Users/saptak/OneDrive/content
+65 error Darwin 14.1.0
+66 error argv "node" "/usr/local/bin/npm" "-g" "install" "jump"
+67 error node v0.10.29
+68 error npm  v2.1.18
+69 error path /usr/local/lib/node_modules/jump
+70 error code EACCES
+71 error errno 3
+72 error Error: EACCES, mkdir '/usr/local/lib/node_modules/jump'
+72 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/jump']
+72 error   errno: 3,
+72 error   code: 'EACCES',
+72 error   path: '/usr/local/lib/node_modules/jump',
+72 error   fstream_type: 'Directory',
+72 error   fstream_path: '/usr/local/lib/node_modules/jump',
+72 error   fstream_class: 'DirWriter',
+72 error   fstream_stack:
+72 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+72 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+72 error      'Object.oncomplete (fs.js:107:15)' ] }
+73 error Please try running this command again as root/Administrator.
+74 verbose exit [ 3, true ]
+75 verbose unbuild lib/node_modules/jump
+76 verbose gentlyRm vacuuming /usr/local/lib/node_modules/jump
