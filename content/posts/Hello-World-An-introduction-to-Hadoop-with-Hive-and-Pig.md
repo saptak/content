@@ -7,13 +7,6 @@ title = "Hello World"
 
 # Hello World! – An introduction to Hadoop with Hive and Pig
 
-The tutorials are presented in sections as listed below.
-
-  * [Overview of Apache Hadoop and Hortonworks Data Platform](http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#overview)
-  * [Using HDP](http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#usingHDP)
-  * [Loading the sample data into HCatalog](http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#loading)
-  * [A Short Apache Hive Tutorial](http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#hive)
-  * [Pig Basics Tutorial](http://hortonworks.com/hadoop-tutorial/hello-world-an-introduction-to-hadoop-hcatalog-hive-and-pig/#pig)
 
 ### Overview of Apache Hadoop and Hortonworks Data Platform
 
