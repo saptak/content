@@ -30,9 +30,9 @@ email: [let@saptak.in](mailto:let@saptak.in)
 ### Summary
 
 A hands-on technologist and marketing leader with more than decade of practical experience performing technical product management, planning, marketing, consulting, evangelism and incubation of partner ecosystem within the enterprise software industry. Proven track record in complex technologies and collecting customer scenarios, synthesizing those into both product requirements and marketing materials that result in a differentiated value proposition with distinctive customer benefits and solid business value. Owned enablement of partner teams and field teams for billion dollar products.  
-  
+
 Won Goldstar Award twice in Microsoft, won Executive Briefing Excellence Award, won Office Solution Builder Award, Going the Extra Mile Award, in addition to many other awards.  
-  
+
 ### Expertise  
 
 - Technical Product Management  
@@ -69,7 +69,8 @@ Won Goldstar Award twice in Microsoft, won Executive Briefing Excellence Award, 
 - Worked with Partner team to produce and publish 20 new Partner Tutorials and wrote 31 new tutorials myself.
 - Worked with the Business Development team to open major opportunities for us, including HDP on Azure, free Azure hours for SE team, joint partner activities funded by Microsoft.
 - Shipped Hortonworks Data Platform 2.1. Sandbox
-- Shipped Hortonworks Data Platform 2.2 Preview
+- Shipped Hortonworks Data Platform 2.2
+- Shipped Hortonworks Data Platform 2.3
 
 
 ### Senior Product Manager, Big Data, SQL Server Product Management
@@ -115,8 +116,8 @@ Won Goldstar Award twice in Microsoft, won Executive Briefing Excellence Award, 
 - Developed prototype of HPC Online Service Platform on Windows Azure
 - Developed Operational Roadmap to merge Computational Finance Lab and ISV POC operations and implemented the plan.
 - Created COGS model and operations roadmap of HPC Online Service for scale
-- Managed a team to operate HPC ISV POC Service and HPC Computational Finance Service. 
-- Enforced plans and processes to ensure security and availability of the service 
+- Managed a team to operate HPC ISV POC Service and HPC Computational Finance Service.
+- Enforced plans and processes to ensure security and availability of the service
 - Managed the budget allocated for the service in FY08/FY09
 
 
@@ -169,5 +170,3 @@ Won Goldstar Award twice in Microsoft, won Executive Briefing Excellence Award, 
 ## Recommendations
 
 Visit [http://linkedin.com/in/saptak](http://linkedin.com/in/saptak)
-
-
